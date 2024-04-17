@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dryh3hb153py2"]
+
+[ext_resource type="Texture2D" uid="uid://cktud87l5goam" path="res://images/frame_found.png" id="1_64vf5"]
+
+[node name="FoundFrame" type="Sprite2D"]
+texture = ExtResource("1_64vf5")

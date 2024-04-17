@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwsm1t2ir3sft"]
+
+[ext_resource type="Texture2D" uid="uid://b6cdt8oh58e0" path="res://images/50x50-red.png" id="1_60xg1"]
+[ext_resource type="Script" path="res://script/patterns.gd" id="1_dnevl"]
+
+[node name="Patterns" type="Node2D" node_paths=PackedStringArray("pattern_blocks")]
+script = ExtResource("1_dnevl")
+pattern_blocks = [NodePath("Patt1"), NodePath("Patt2"), NodePath("Patt3"), NodePath("Patt4"), NodePath("Patt5")]
+
+[node name="Patt1" type="Sprite2D" parent="."]
+texture = ExtResource("1_60xg1")
+
+[node name="Patt2" type="Sprite2D" parent="."]
+texture = ExtResource("1_60xg1")
+
+[node name="Patt3" type="Sprite2D" parent="."]
+texture = ExtResource("1_60xg1")
+
+[node name="Patt4" type="Sprite2D" parent="."]
+texture = ExtResource("1_60xg1")
+
+[node name="Patt5" type="Sprite2D" parent="."]
+texture = ExtResource("1_60xg1")

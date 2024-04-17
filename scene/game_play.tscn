@@ -2,11 +2,12 @@
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
 [ext_resource type="Texture2D" uid="uid://cey5sn8qjpe4i" path="res://images/pictures/testpic1.jpg" id="2_ydn58"]
-[ext_resource type="Texture2D" uid="uid://b6cdt8oh58e0" path="res://images/50x50-red.png" id="3_lt4nm"]
+[ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="3_dy2jk"]
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_blocks")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node")]
 script = ExtResource("1_lf48k")
-pattern_blocks = [NodePath("Patterns/Patt1"), NodePath("Patterns/Patt2"), NodePath("Patterns/Patt3"), NodePath("Patterns/Patt4"), NodePath("Patterns/Patt5")]
+pattern_node = NodePath("Patterns")
+overlay_node = NodePath("PictureArea/Picture/Overlays")
 
 [node name="PictureArea" type="Area2D" parent="."]
 
@@ -14,19 +15,6 @@ pattern_blocks = [NodePath("Patterns/Patt1"), NodePath("Patterns/Patt2"), NodePa
 texture = ExtResource("2_ydn58")
 centered = false
 
-[node name="Patterns" type="Node2D" parent="."]
+[node name="Overlays" type="Node2D" parent="PictureArea/Picture"]
 
-[node name="Patt1" type="Sprite2D" parent="Patterns"]
-texture = ExtResource("3_lt4nm")
-
-[node name="Patt2" type="Sprite2D" parent="Patterns"]
-texture = ExtResource("3_lt4nm")
-
-[node name="Patt3" type="Sprite2D" parent="Patterns"]
-texture = ExtResource("3_lt4nm")
-
-[node name="Patt4" type="Sprite2D" parent="Patterns"]
-texture = ExtResource("3_lt4nm")
-
-[node name="Patt5" type="Sprite2D" parent="Patterns"]
-texture = ExtResource("3_lt4nm")
+[node name="Patterns" parent="." instance=ExtResource("3_dy2jk")]

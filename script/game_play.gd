@@ -16,12 +16,15 @@ extends Node2D
 
 # constants
 
+const found_frame = preload("res://scene/found_frame.tscn")
+
 const patterns_to_find = [66, 77, 52, 75, 18, 69, 61, 41]
 
 # exports (The following properties must be set in the Inspector by the designer)
 
 @export var picture_area_vertical_offset := 60
-@export var pattern_blocks: Array[Sprite2D]
+@export var pattern_node: Patterns
+@export var overlay_node: Node2D
 
 # public variables
 
@@ -63,7 +66,7 @@ func _ready() -> void:
 	patterns.shuffle()
 	printt(patterns_to_find, patterns)
 		
-	arrange_pattern_boxes()
+	pattern_node.arrange_pattern_boxes(picture, patterns)
 	
 	
 		
@@ -82,7 +85,7 @@ func _input(event: InputEvent) -> void:
 		event.pressed): 
 		var frame := get_frame_clicked(event.position)
 		if frame >= 0:
-			print("Frame: ", frame)
+			set_frame_found(frame)
 
 # Built-in Signal Callbacks
 
@@ -122,30 +125,24 @@ func get_frame_clicked(pos: Vector2) -> int:
 	return frame_number
 
 
-# arrange_pattern_boxes()
-# Position pattern boxes on the screen
+# set_frame_found(frame)
+# Player cliced on one of our pattern frames
 #
 # Parameters
-#	None
+#	frame: int						Frame number found
 # Return
 #	None
 #==
 # What the code is doing (steps)
-func arrange_pattern_boxes() -> void:
-	var x_center := get_viewport_rect().end.x / 2
-	var y_pos := get_viewport_rect().end.y - 50 - Constant.PATTERN_SIZE
-	var cur_x := x_center - (int(pattern_blocks.size() / 2) * (Constant.PATTERN_SIZE + 20)) 
-	
-	for i in pattern_blocks.size():
-		pattern_blocks[i].position.y = y_pos
-		pattern_blocks[i].position.x = cur_x
-		cur_x += Constant.PATTERN_SIZE + 20
-		pattern_blocks[i].texture = picture.texture
-		pattern_blocks[i].hframes = Constant.HFRAME_COUNT
-		pattern_blocks[i].vframes = Constant.VFRAME_COUNT
-		pattern_blocks[i].frame = patterns[i]
-		printt("i", i, "pattern #", patterns[i])
-	
+func set_frame_found(frame: int) -> void:
+	if patterns.find(frame) < 0:
+		return
+		
+	var pos := Vector2(frame % Constant.HFRAME_COUNT * Constant.PATTERN_SIZE  + Constant.PATTERN_SIZE / 2,
+					   (int(frame / Constant.HFRAME_COUNT) * Constant.PATTERN_SIZE) + Constant.PATTERN_SIZE / 2)
+	var overlay = found_frame.instantiate()
+	overlay.position = pos
+	overlay_node.add_child(overlay)
 
 # Subclasses
 
