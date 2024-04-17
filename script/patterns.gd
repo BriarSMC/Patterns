@@ -23,6 +23,8 @@ extends Node2D
 
 # private variables
 
+var pattern_numbers: Array[int]
+
 # onready variables
 
 #endregion
@@ -62,10 +64,12 @@ func _ready() -> void:
 #	None
 #==
 # What the code is doing (steps)
-func arrange_pattern_boxes(picture: Sprite2D, patterns: Array[int]) -> void:
+func arrange_pattern_boxes(picture: Sprite2D, 
+						   patterns: Array[int], 
+						   available: Array[bool]) -> void:
 	var x_center := get_viewport_rect().end.x / 2
 	var y_pos := get_viewport_rect().end.y - 50 - Constant.PATTERN_SIZE
-	var cur_x := x_center - (int(pattern_blocks.size() / 2) * (Constant.PATTERN_SIZE + 20)) 
+	var cur_x := x_center - ((pattern_blocks.size() / 2.0) * float(Constant.PATTERN_SIZE + 20)) 
 	
 	for i in pattern_blocks.size():
 		pattern_blocks[i].position.y = y_pos
@@ -76,7 +80,33 @@ func arrange_pattern_boxes(picture: Sprite2D, patterns: Array[int]) -> void:
 		pattern_blocks[i].vframes = Constant.VFRAME_COUNT
 		pattern_blocks[i].frame = patterns[i]
 		printt("i", i, "pattern #", patterns[i], "pos", pattern_blocks[i].position)
+		pattern_numbers.append(patterns[i])
+		available[i] = false
 	
+
+# set_pattern_frame(ndx, patterns, avail)
+# Set the frame number for a pattern node
+#
+# Parameters
+#	frame: int						Index of the pattern_block
+#	patterns: Array[int]			List of pattern frames
+#	avail: Array[bool]				List of available patterns
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func set_new_pattern_frame(frame: int, patterns: Array[int], avail: Array[bool]) -> void:
+	var p = avail.find(true)
+	var i: int = pattern_numbers.find(frame)	
+	
+	if p < 0:
+		pattern_blocks[i].visible = false
+		pattern_numbers[i] = -1
+	else:
+		pattern_numbers[i] = patterns[p]
+		pattern_blocks[i].frame = patterns[p]
+		avail[p] = false
+
 
 # Private Methods
 

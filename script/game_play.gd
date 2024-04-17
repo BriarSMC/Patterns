@@ -12,6 +12,8 @@ extends Node2D
 
 # signals
 
+signal found_count_zero_set
+
 # enums
 
 # constants
@@ -32,6 +34,8 @@ const patterns_to_find = [66, 77, 52, 75, 18, 69, 61, 41]
 
 var box: Rect2
 var patterns: Array[int]
+var patterns_available: Array[bool]
+var found_count: int
 
 # onready variables
 
@@ -56,8 +60,9 @@ var patterns: Array[int]
 # Load the patterns to find and shuffle them
 # Arrange the patterns to find boxes on screen
 func _ready() -> void:
+	found_count_zero_set.connect(found_count_zero)
 	var vp = get_viewport_rect()
-	picture.position.x = vp.end.x / 2 - Constant.PICTURE_WIDTH / 2
+	picture.position.x = vp.end.x / 2.0 - (float(Constant.PICTURE_WIDTH) / 2.0)
 	picture.position.y = picture_area_vertical_offset
 	box = Rect2(picture.position, 
 			Vector2(Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT))
@@ -66,7 +71,12 @@ func _ready() -> void:
 	patterns.shuffle()
 	printt(patterns_to_find, patterns)
 		
-	pattern_node.arrange_pattern_boxes(picture, patterns)
+	patterns_available.resize(patterns.size())
+	patterns_available.fill(true)
+	pattern_node.arrange_pattern_boxes(picture, patterns, patterns_available)
+	
+	found_count = patterns.size()
+	
 	
 	
 		
@@ -84,15 +94,20 @@ func _input(event: InputEvent) -> void:
 		event.button_index == MOUSE_BUTTON_LEFT and 
 		event.pressed): 
 		var frame := get_frame_clicked(event.position)
-		if frame >= 0:
+		if frame >= 0 and patterns.find(frame) != -1:
 			set_frame_found(frame)
+			found_count -= 1
+			if found_count == 0:
+				found_count_zero_set.emit()
 
 # Built-in Signal Callbacks
 
 
 # Custom Signal Callbacks
 
-
+func found_count_zero():
+	print("All patterns found")
+	
 # Public Methods
 
 
@@ -135,14 +150,14 @@ func get_frame_clicked(pos: Vector2) -> int:
 #==
 # What the code is doing (steps)
 func set_frame_found(frame: int) -> void:
-	if patterns.find(frame) < 0:
-		return
-		
-	var pos := Vector2(frame % Constant.HFRAME_COUNT * Constant.PATTERN_SIZE  + Constant.PATTERN_SIZE / 2,
-					   (int(frame / Constant.HFRAME_COUNT) * Constant.PATTERN_SIZE) + Constant.PATTERN_SIZE / 2)
+	var pos := Vector2(frame % Constant.HFRAME_COUNT * float(Constant.PATTERN_SIZE)  + float(Constant.PATTERN_SIZE) / 2.0,
+					   float((float(frame) / float(Constant.HFRAME_COUNT) * Constant.PATTERN_SIZE) + float(Constant.PATTERN_SIZE) / 2.0))
 	var overlay = found_frame.instantiate()
 	overlay.position = pos
 	overlay_node.add_child(overlay)
 
+	pattern_node.set_new_pattern_frame(frame, patterns, patterns_available)
+		
+	
 # Subclasses
 
