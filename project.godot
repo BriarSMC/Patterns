@@ -11,6 +11,8 @@ config_version=5
 [application]
 
 config/name="Patterns"
+config/description="Find patterns in a picture"
+config/version="0.0.0"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
