@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3 uid="uid://cnlojcsphsmxi"]
+[gd_scene load_steps=3 format=3 uid="uid://cnlojcsphsmxi"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
+[ext_resource type="Texture2D" uid="uid://cey5sn8qjpe4i" path="res://images/pictures/testpic1.jpg" id="2_ydn58"]
 
 [node name="GamePlay" type="Node2D"]
 script = ExtResource("1_lf48k")
+
+[node name="PictureArea" type="Area2D" parent="."]
+
+[node name="Picture" type="Sprite2D" parent="PictureArea"]
+texture = ExtResource("2_ydn58")
+centered = false
