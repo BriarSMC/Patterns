@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ImageData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/image_data.gd" id="1_mk58j"]
+
+[resource]
+script = ExtResource("1_mk58j")
+image_data = {
+"0000": {
+"image": "stsimon.jpg",
+"pattern_list": [60, 63, 58, 10, 15, 26, 36, 8]
+},
+"0001": {
+"image": "ui-bg.png",
+"pattern_list": [48, 26, 40, 63, 45, 18, 20, 67]
+}
+}

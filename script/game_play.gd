@@ -20,8 +20,6 @@ signal found_count_zero_set
 
 const found_frame = preload("res://scene/found_frame.tscn")
 
-const patterns_to_find = [66, 77, 52, 75, 18, 69, 61, 41]
-
 # exports (The following properties must be set in the Inspector by the designer)
 
 @export var picture_area_vertical_offset := 60
@@ -31,7 +29,8 @@ const patterns_to_find = [66, 77, 52, 75, 18, 69, 61, 41]
 # public variables
 
 # private variables
-
+#var patterns_to_find: Array
+var picture_src: String
 var box: Rect2
 var patterns: Array[int]
 var patterns_available: Array[bool]
@@ -62,14 +61,19 @@ var found_count: int
 func _ready() -> void:
 	found_count_zero_set.connect(found_count_zero)
 	var vp = get_viewport_rect()
+	
+	var config = Config.get_picture(Config.current_picture)
+	
+	picture.texture = load(config.image)
+	picture.region_rect = Rect2(0, 0, Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT)
 	picture.position.x = vp.end.x / 2.0 - (float(Constant.PICTURE_WIDTH) / 2.0)
 	picture.position.y = picture_area_vertical_offset
 	box = Rect2(picture.position, 
 			Vector2(Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT))
 
-	patterns.assign(patterns_to_find)
+	patterns.assign(config.pattern_list)
 	patterns.shuffle()
-	printt(patterns_to_find, patterns)
+	printt(patterns)
 		
 	patterns_available.resize(patterns.size())
 	patterns_available.fill(true)
@@ -150,8 +154,9 @@ func get_frame_clicked(pos: Vector2) -> int:
 #==
 # What the code is doing (steps)
 func set_frame_found(frame: int) -> void:
-	var pos := Vector2(frame % Constant.HFRAME_COUNT * float(Constant.PATTERN_SIZE)  + float(Constant.PATTERN_SIZE) / 2.0,
-					   float((float(frame) / float(Constant.HFRAME_COUNT) * Constant.PATTERN_SIZE) + float(Constant.PATTERN_SIZE) / 2.0))
+	var posx := frame % Constant.HFRAME_COUNT * float(Constant.PATTERN_SIZE) + float(Constant.PATTERN_SIZE) / 2.0
+	var posy := float(frame / Constant.HFRAME_COUNT * Constant.PATTERN_SIZE + float(Constant.PATTERN_SIZE) / 2.0)
+	var pos := Vector2(posx, posy)
 	var overlay = found_frame.instantiate()
 	overlay.position = pos
 	overlay_node.add_child(overlay)

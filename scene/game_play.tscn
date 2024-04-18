@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnlojcsphsmxi"]
+[gd_scene load_steps=3 format=3 uid="uid://cnlojcsphsmxi"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
-[ext_resource type="Texture2D" uid="uid://cey5sn8qjpe4i" path="res://images/pictures/testpic1.jpg" id="2_ydn58"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="3_dy2jk"]
 
 [node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node")]
@@ -12,7 +11,6 @@ overlay_node = NodePath("PictureArea/Picture/Overlays")
 [node name="PictureArea" type="Area2D" parent="."]
 
 [node name="Picture" type="Sprite2D" parent="PictureArea"]
-texture = ExtResource("2_ydn58")
 centered = false
 
 [node name="Overlays" type="Node2D" parent="PictureArea/Picture"]
