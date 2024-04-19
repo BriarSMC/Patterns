@@ -21,6 +21,8 @@ extends Node
 var current_picture := 0
 var image_data_res: ImageData 
 var image_data := {}
+var player_data_res: PlayerData
+var player_data := {}
 
 # private variables
 
@@ -43,6 +45,8 @@ var image_data := {}
 func _ready() -> void:
 	image_data_res = ImageData.load_or_create()
 	image_data = image_data_res.image_data
+	player_data_res = PlayerData.load_or_create()
+	player_data = player_data_res.player_data
 
 
 # Built-in Signal Callbacks

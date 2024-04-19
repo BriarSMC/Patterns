@@ -1,0 +1,57 @@
+[gd_resource type="Theme" load_steps=11 format=3 uid="uid://dafyk5gqn31av"]
+
+[ext_resource type="FontFile" uid="uid://r51jp7peudof" path="res://fonts/Texturina-VariableFont_opsz,wght.ttf" id="1_xcxug"]
+[ext_resource type="Texture2D" uid="uid://byn6swbq3ohcs" path="res://images/square-chevron.svg" id="2_h2f1r"]
+[ext_resource type="Texture2D" uid="uid://bpgwcewif4hv7" path="res://images/square-empty.svg" id="3_l1gom"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x7yfk"]
+bg_color = Color(0.137255, 0.639216, 0.662745, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 27
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 27
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0bwvc"]
+bg_color = Color(0.498039, 0.737255, 0.427451, 1)
+corner_radius_top_left = 13
+corner_radius_top_right = 27
+corner_radius_bottom_right = 13
+corner_radius_bottom_left = 27
+expand_margin_bottom = 7.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fpi08"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_48tbd"]
+bg_color = Color(0, 0.254902, 0.839216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8415p"]
+bg_color = Color(0.0431373, 0.0156863, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_10owk"]
+bg_color = Color(0.0431373, 0.0156863, 0.180392, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tlfp7"]
+bg_color = Color(0.0666667, 0.0235294, 0.270588, 1)
+
+[resource]
+Button/colors/font_color = Color(0, 0, 0, 1)
+Button/colors/font_focus_color = Color(0, 0.254902, 0.839216, 1)
+Button/colors/font_hover_color = Color(0.0313726, 0.172549, 0.0235294, 1)
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 8
+Button/font_sizes/font_size = 50
+Button/fonts/font = ExtResource("1_xcxug")
+Button/styles/hover = SubResource("StyleBoxFlat_x7yfk")
+Button/styles/normal = SubResource("StyleBoxFlat_0bwvc")
+PopupDialog/styles/panel = SubResource("StyleBoxFlat_fpi08")
+PopupMenu/font_sizes/font_size = 30
+PopupMenu/icons/radio_checked = ExtResource("2_h2f1r")
+PopupMenu/icons/radio_unchecked = ExtResource("3_l1gom")
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_48tbd")
+TextEdit/font_sizes/font_size = 32
+TextEdit/fonts/font = ExtResource("1_xcxug")
+TextEdit/styles/focus = SubResource("StyleBoxFlat_8415p")
+TextEdit/styles/normal = SubResource("StyleBoxFlat_10owk")
+Tree/font_sizes/font_size = 30
+Tree/font_sizes/title_button_font_size = 30
+VSeparator/styles/separator = SubResource("StyleBoxFlat_tlfp7")

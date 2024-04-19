@@ -1,0 +1,92 @@
+[gd_scene load_steps=7 format=3 uid="uid://cdg1uganw7jjo"]
+
+[ext_resource type="Script" path="res://script/splash_screen.gd" id="1_eqgd8"]
+[ext_resource type="Texture2D" uid="uid://b1dpolmt0eoro" path="res://images/beautiful woman be398243-5682-435b-9831-74d4aaa16294.jpg" id="2_varbq"]
+[ext_resource type="Texture2D" uid="uid://csbxski2bdfjq" path="res://images/patterns-splash-1.png" id="3_nw3tf"]
+[ext_resource type="Texture2D" uid="uid://c3r5ec7e7vggm" path="res://images/patterns-splash-2.png" id="4_lsmmm"]
+
+[sub_resource type="Animation" id="Animation_8fgjn"]
+resource_name = "fade-in"
+length = 6.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Backdrop:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Title1:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(1.6, 3.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0.00392157), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Title2:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(2.8, 4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(4.6, 6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l48ia"]
+_data = {
+"fade-in": SubResource("Animation_8fgjn")
+}
+
+[node name="SplashScreen" type="Node2D"]
+script = ExtResource("1_eqgd8")
+
+[node name="Backdrop" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(-22, -60)
+scale = Vector2(2.39355, 1.63086)
+texture = ExtResource("2_varbq")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="Title1" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.00392157)
+position = Vector2(1953, 371)
+texture = ExtResource("3_nw3tf")
+
+[node name="Title2" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+position = Vector2(2100, 547)
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("4_lsmmm")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l48ia")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

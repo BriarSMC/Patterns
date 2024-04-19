@@ -17,6 +17,8 @@ extends Node2D
 
 # constants
 
+const GAME_CONTROL = preload("res://scene/game_control.tscn")
+
 # exports (The following properties must be set in the Inspector by the designer)
 
 # public variables
@@ -24,6 +26,8 @@ extends Node2D
 # private variables
 
 # onready variables
+
+@onready var animation_player = $AnimationPlayer
 
 #endregion
 
@@ -40,23 +44,16 @@ extends Node2D
 #==
 # What the code is doing (steps)
 func _ready() -> void:
+	animation_player.play("fade-in")
 	pass
 
-
-# _process(delta)
-# Called once per frame
-#
-# Parameters
-#	delta: float            	Seconds elapsed since last frame
-# Return
-#	None
-#==
-# What the code is doing (steps)
-func _process(delta) -> void:
-	pass
 
 
 # Built-in Signal Callbacks
+
+
+func _on_animation_player_animation_finished(anim_name):
+	get_tree().change_scene_to_packed(GAME_CONTROL)
 
 
 # Custom Signal Callbacks
@@ -69,4 +66,5 @@ func _process(delta) -> void:
 
 
 # Subclasses
+
 

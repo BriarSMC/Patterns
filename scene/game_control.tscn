@@ -1,0 +1,153 @@
+[gd_scene load_steps=6 format=3 uid="uid://bgsdmf6u2fc5c"]
+
+[ext_resource type="Script" path="res://script/game_control.gd" id="1_22epy"]
+[ext_resource type="Texture2D" uid="uid://bmvdfwxhsvky4" path="res://images/beautiful woman 94fad4b7-bd1e-41a0-8c69-6283748b6e00.jpg" id="1_fqjkt"]
+[ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="2_pvf6k"]
+
+[sub_resource type="Animation" id="Animation_ei5h1"]
+resource_name = "fade-in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l72vp"]
+_data = {
+"fade-in": SubResource("Animation_ei5h1")
+}
+
+[node name="GameControl" type="Node2D"]
+script = ExtResource("1_22epy")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_pvf6k")
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0431373, 0.0156863, 0.180392, 1)
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.15
+anchor_right = 0.85
+anchor_bottom = 1.0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("1_fqjkt")
+
+[node name="StartQuit" type="MarginContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 308.0
+offset_bottom = 214.0
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/StartQuit"]
+layout_mode = 2
+
+[node name="StartBtn" type="Button" parent="CanvasLayer/Control/StartQuit/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_pvf6k")
+text = "Start Game"
+
+[node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/StartQuit/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="QuitBtn" type="Button" parent="CanvasLayer/Control/StartQuit/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("2_pvf6k")
+text = "Quit Game"
+
+[node name="PlayerSelection" type="MarginContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_constants/margin_top = 30
+theme_override_constants/margin_right = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/PlayerSelection"]
+layout_mode = 2
+
+[node name="NewPlayerBtn" type="Button" parent="CanvasLayer/Control/PlayerSelection/VBoxContainer"]
+layout_mode = 2
+text = "New Player"
+
+[node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/PlayerSelection/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="SelectPlayerBtn" type="OptionButton" parent="CanvasLayer/Control/PlayerSelection/VBoxContainer"]
+layout_mode = 2
+item_count = 1
+popup/item_0/text = ""
+popup/item_0/id = 0
+
+[node name="AddNewPlayer" type="AcceptDialog" parent="CanvasLayer/Control/PlayerSelection"]
+title = "New Player"
+initial_position = 1
+size = Vector2i(500, 157)
+always_on_top = true
+popup_window = true
+ok_button_text = "Add"
+
+[node name="PlayerName" type="LineEdit" parent="CanvasLayer/Control/PlayerSelection/AddNewPlayer"]
+offset_left = 8.0
+offset_top = 25.0
+offset_right = 152.0
+offset_bottom = 78.0
+theme_override_font_sizes/font_size = 40
+placeholder_text = "New Player Name"
+alignment = 1
+clear_button_enabled = true
+
+[node name="ErrorMessage" type="AcceptDialog" parent="CanvasLayer/Control/PlayerSelection"]
+initial_position = 2
+size = Vector2i(500, 127)
+always_on_top = true
+popup_window = true
+
+[node name="Message" type="Label" parent="CanvasLayer/Control/PlayerSelection/ErrorMessage"]
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_l72vp")
+}
+autoplay = "fade-in"
+
+[connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/VBoxContainer/NewPlayerBtn" to="." method="_on_new_player_btn_pressed"]
+[connection signal="confirmed" from="CanvasLayer/Control/PlayerSelection/AddNewPlayer" to="." method="_on_add_new_player_confirmed"]
