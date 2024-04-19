@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bgsdmf6u2fc5c"]
+[gd_scene load_steps=7 format=3 uid="uid://bgsdmf6u2fc5c"]
 
 [ext_resource type="Script" path="res://script/game_control.gd" id="1_22epy"]
 [ext_resource type="Texture2D" uid="uid://bmvdfwxhsvky4" path="res://images/beautiful woman 94fad4b7-bd1e-41a0-8c69-6283748b6e00.jpg" id="1_fqjkt"]
@@ -19,18 +19,36 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_5o5ku"]
+resource_name = "fade-out"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer/Control:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_l72vp"]
 _data = {
-"fade-in": SubResource("Animation_ei5h1")
+"fade-in": SubResource("Animation_ei5h1"),
+"fade-out": SubResource("Animation_5o5ku")
 }
 
 [node name="GameControl" type="Node2D"]
+modulate = Color(1, 1, 1, 0.4)
 script = ExtResource("1_22epy")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
-modulate = Color(1, 1, 1, 0)
+modulate = Color(0, 0, 0, 1)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,16 +133,16 @@ popup/item_0/id = 0
 [node name="AddNewPlayer" type="AcceptDialog" parent="CanvasLayer/Control/PlayerSelection"]
 title = "New Player"
 initial_position = 1
-size = Vector2i(500, 157)
+size = Vector2i(500, 167)
 always_on_top = true
 popup_window = true
 ok_button_text = "Add"
 
 [node name="PlayerName" type="LineEdit" parent="CanvasLayer/Control/PlayerSelection/AddNewPlayer"]
 offset_left = 8.0
-offset_top = 25.0
-offset_right = 152.0
-offset_bottom = 78.0
+offset_top = 8.0
+offset_right = 492.0
+offset_bottom = 71.0
 theme_override_font_sizes/font_size = 40
 placeholder_text = "New Player Name"
 alignment = 1
@@ -132,13 +150,15 @@ clear_button_enabled = true
 
 [node name="ErrorMessage" type="AcceptDialog" parent="CanvasLayer/Control/PlayerSelection"]
 initial_position = 2
-size = Vector2i(500, 127)
+size = Vector2i(500, 159)
 always_on_top = true
 popup_window = true
 
 [node name="Message" type="Label" parent="CanvasLayer/Control/PlayerSelection/ErrorMessage"]
-offset_right = 40.0
-offset_bottom = 23.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 492.0
+offset_bottom = 63.0
 theme_override_font_sizes/font_size = 40
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -149,6 +169,8 @@ libraries = {
 }
 autoplay = "fade-in"
 
+[connection signal="pressed" from="CanvasLayer/Control/StartQuit/VBoxContainer/StartBtn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/StartQuit/VBoxContainer/QuitBtn" to="." method="_on_quit_btn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/VBoxContainer/NewPlayerBtn" to="." method="_on_new_player_btn_pressed"]
 [connection signal="confirmed" from="CanvasLayer/Control/PlayerSelection/AddNewPlayer" to="." method="_on_add_new_player_confirmed"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

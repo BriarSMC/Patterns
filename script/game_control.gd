@@ -24,12 +24,12 @@ const GAME_PLAY = preload("res://scene/game_play.tscn")
 # onready variables
 
 @onready var control = $CanvasLayer/Control
-@onready var quit_btn = $CanvasLayer/Control/QuitBtn
 @onready var select_player_btn = $CanvasLayer/Control/PlayerSelection/VBoxContainer/SelectPlayerBtn
 @onready var add_new_player = $CanvasLayer/Control/PlayerSelection/AddNewPlayer
 @onready var player_name = $CanvasLayer/Control/PlayerSelection/AddNewPlayer/PlayerName
 @onready var error_message = $CanvasLayer/Control/PlayerSelection/ErrorMessage
 @onready var message = $CanvasLayer/Control/PlayerSelection/ErrorMessage/Message
+@onready var animation_player = $AnimationPlayer
 
 #endregion
 
@@ -77,6 +77,11 @@ func _input(event: InputEvent) -> void:
 
 # Built-in Signal Callbacks
 
+
+func _on_start_btn_pressed():
+	animation_player.play("fade-out")
+
+
 func _on_quit_btn_pressed():
 	get_tree().quit()
 
@@ -88,6 +93,12 @@ func _on_new_player_btn_pressed():
 
 func _on_add_new_player_confirmed():
 	add_new_player_confirmed()
+
+
+
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == 'fade-out':
+		get_tree().change_scene_to_packed(GAME_PLAY)
 
 # Custom Signal Callbacks
 
@@ -133,13 +144,13 @@ func load_players() -> void:
 # Clear the text field in the popup (VERY IMPORTANT DON'T FORGET)
 func add_new_player_confirmed() -> void:
 	add_new_player.visible = false
-	var name = player_name.text
-	var name_key = name.to_upper()
+	var name_new = player_name.text
+	var name_key = name_new.to_upper()
 	if Config.player_data.has(name_key):
 		message.text = "Name aleady in use."
 		error_message.visible = true
 	else:	
-		Config.player_data[name_key] = {"name": name, "current_picture": 0}
+		Config.player_data[name_key] = {"name": name_new, "current_picture": 0}
 		Config.player_data_res.save()
 		load_players()
 

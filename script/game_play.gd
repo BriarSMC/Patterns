@@ -155,7 +155,7 @@ func get_frame_clicked(pos: Vector2) -> int:
 # What the code is doing (steps)
 func set_frame_found(frame: int) -> void:
 	var posx := frame % Constant.HFRAME_COUNT * float(Constant.PATTERN_SIZE) + float(Constant.PATTERN_SIZE) / 2.0
-	var posy := float(frame / Constant.HFRAME_COUNT * Constant.PATTERN_SIZE + float(Constant.PATTERN_SIZE) / 2.0)
+	var posy := float(float(frame) / Constant.HFRAME_COUNT * Constant.PATTERN_SIZE + float(Constant.PATTERN_SIZE) / 2.0)
 	var pos := Vector2(posx, posy)
 	var overlay = found_frame.instantiate()
 	overlay.position = pos

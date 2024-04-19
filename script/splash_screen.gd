@@ -52,7 +52,7 @@ func _ready() -> void:
 # Built-in Signal Callbacks
 
 
-func _on_animation_player_animation_finished(anim_name):
+func _on_animation_player_animation_finished(_anim_name):
 	get_tree().change_scene_to_packed(GAME_CONTROL)
 
 
