@@ -22,7 +22,7 @@ const found_frame = preload("res://scene/found_frame.tscn")
 
 # exports (The following properties must be set in the Inspector by the designer)
 
-@export var picture_area_vertical_offset := 60
+@export var picture_area_vertical_offset := 260
 @export var pattern_node: Patterns
 @export var overlay_node: Node2D
 
@@ -40,6 +40,8 @@ var found_count: int
 
 @onready var picture_area := $PictureArea
 @onready var picture := $PictureArea/Picture
+@onready var frame_image := $PictureArea/Picture/FrameImage
+
 
 #endregion
 
@@ -70,7 +72,11 @@ func _ready() -> void:
 	picture.position.y = picture_area_vertical_offset
 	box = Rect2(picture.position, 
 			Vector2(Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT))
-
+			
+	var r: Rect2 = picture.get_rect()
+	frame_image.position.x = r.position.x + (r.end.x/2)
+	frame_image.position.y = r.position.y + (r.end.y/2)
+	
 	patterns.assign(config.pattern_list)
 	patterns.shuffle()
 	printt(patterns)
@@ -94,6 +100,9 @@ func _ready() -> void:
 #==
 
 func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel"):
+		get_tree().quit()
+		
 	if (event is InputEventMouseButton and 
 		event.button_index == MOUSE_BUTTON_LEFT and 
 		event.pressed): 
