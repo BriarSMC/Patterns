@@ -44,10 +44,10 @@ const GAME_PLAY = preload("res://scene/game_play.tscn")
 # Return
 #		None
 #==
-# What the code is doing (steps)
-# NOTE: Child must call super._ready() if it defines own _ready() method
+# If the player data structure is empty, then hide the option button
+# Otherwise, load it
+# Set up the add player popup window
 func _ready() -> void:
-	print("Player Data: ", Config.player_data)
 	if Config.player_data.size() == 0:
 		select_player_btn.visible = false
 	else:
@@ -59,6 +59,7 @@ func _ready() -> void:
 	add_new_player.add_cancel_button("Cancel")
 	add_new_player.register_text_enter(player_name)
 
+
 # _input(event)
 # Called when input is available
 #
@@ -68,10 +69,17 @@ func _ready() -> void:
 #	None
 #==
 func _input(event: InputEvent) -> void:
-	pass
-
+	if event.is_action_pressed("clear-player-data"):
+		print("Clear Player Data")
+		Config.player_data.clear()
+		Config.player_data_res.save()
+		load_players()
 
 # Built-in Signal Callbacks
+
+func _on_quit_btn_pressed():
+	get_tree().quit()
+
 
 func _on_new_player_btn_pressed():
 	add_new_player.visible = true
@@ -79,6 +87,51 @@ func _on_new_player_btn_pressed():
 
 
 func _on_add_new_player_confirmed():
+	add_new_player_confirmed()
+
+# Custom Signal Callbacks
+
+
+# Public Methods
+
+
+# Private Methods
+
+# load_players()
+# load player names into the option button
+#
+# Parameters
+#	None
+# Return
+#	None
+#==
+# Clear the existing list
+# Loop through the player data structure
+#	Add player name to the option button list
+func load_players() -> void:
+	if Config.player_data.is_empty():
+		select_player_btn.visible = false
+	else:
+		select_player_btn.visible = true
+		select_player_btn.clear()
+		for data in Config.player_data:
+			select_player_btn.add_item(Config.player_data[data].name)
+
+
+# add_new_player_confirmed()
+# New player popup confirmed. Add the new player.
+#
+# Parameters
+#	None
+# Return
+#	None
+#==
+# Turn off the popup
+# Get the player name from the popup
+# If the name already exists, then display error popup
+# Otherwise, add the new player name and reload the player option button
+# Clear the text field in the popup (VERY IMPORTANT DON'T FORGET)
+func add_new_player_confirmed() -> void:
 	add_new_player.visible = false
 	var name = player_name.text
 	var name_key = name.to_upper()
@@ -91,21 +144,6 @@ func _on_add_new_player_confirmed():
 		load_players()
 
 	player_name.text = ""
-
-# Custom Signal Callbacks
-
-
-# Public Methods
-
-
-# Private Methods
-
-func load_players() -> void:
-	select_player_btn.clear()
-	for data in Config.player_data:
-		print("Data: ", data)
-		select_player_btn.add_item(Config.player_data[data].name)
-
 # Subclasses
 
 
