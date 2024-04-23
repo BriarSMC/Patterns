@@ -41,6 +41,7 @@ var found_count: int
 @onready var picture_area := $PictureArea
 @onready var picture := $PictureArea/Picture
 @onready var frame_image := $PictureArea/Picture/FrameImage
+@onready var background = $Background
 
 
 #endregion
@@ -77,6 +78,11 @@ func _ready() -> void:
 	frame_image.position.x = r.position.x + (r.end.x/2)
 	frame_image.position.y = r.position.y + (r.end.y/2)
 	
+	var ds = DisplayServer.screen_get_size()
+	print ("ds: ", ds)
+	background.scale.x = float(ds.x) / float(background.get_rect().size.x)
+	
+	#dark_screen_sprite.scale = get_viewport().size / Vector2(512,300)
 	patterns.assign(config.pattern_list)
 	patterns.shuffle()
 	printt(patterns)

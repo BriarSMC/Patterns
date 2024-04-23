@@ -1,13 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnlojcsphsmxi"]
+[gd_scene load_steps=5 format=3 uid="uid://cnlojcsphsmxi"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
 [ext_resource type="Texture2D" uid="uid://bhs11gnndd1yn" path="res://images/Frame.png" id="2_6op6t"]
+[ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_qa2nw"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="3_dy2jk"]
 
 [node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node")]
 script = ExtResource("1_lf48k")
 pattern_node = NodePath("Patterns")
 overlay_node = NodePath("PictureArea/Picture/Overlays")
+
+[node name="Background" type="Sprite2D" parent="."]
+texture_repeat = 1
+scale = Vector2(4, 2.587)
+texture = ExtResource("2_qa2nw")
+centered = false
 
 [node name="PictureArea" type="Area2D" parent="."]
 

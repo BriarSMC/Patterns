@@ -44,6 +44,7 @@ const GAME_CONTROL = preload("res://scene/game_control.tscn")
 #==
 # What the code is doing (steps)
 func _ready() -> void:
+	#get_viewport().size = DisplayServer.screen_get_size()
 	animation_player.play("fade-in")
 	pass
 

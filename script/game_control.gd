@@ -24,7 +24,7 @@ const GAME_PLAY = preload("res://scene/game_play.tscn")
 # onready variables
 
 @onready var control = $CanvasLayer/Control
-@onready var select_player_btn = $CanvasLayer/Control/PlayerSelection/VBoxContainer/SelectPlayerBtn
+@onready var select_player_btn = $CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/SelectPlayerBtn
 @onready var add_new_player = $CanvasLayer/Control/PlayerSelection/AddNewPlayer
 @onready var player_name = $CanvasLayer/Control/PlayerSelection/AddNewPlayer/PlayerName
 @onready var error_message = $CanvasLayer/Control/PlayerSelection/ErrorMessage

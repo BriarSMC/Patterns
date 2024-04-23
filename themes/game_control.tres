@@ -17,7 +17,9 @@ corner_radius_top_left = 13
 corner_radius_top_right = 27
 corner_radius_bottom_right = 13
 corner_radius_bottom_left = 27
-expand_margin_bottom = 7.0
+expand_margin_left = 12.0
+expand_margin_right = 11.0
+expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fpi08"]
 
@@ -38,8 +40,8 @@ Button/colors/font_color = Color(0, 0, 0, 1)
 Button/colors/font_focus_color = Color(0, 0.254902, 0.839216, 1)
 Button/colors/font_hover_color = Color(0.0313726, 0.172549, 0.0235294, 1)
 Button/constants/icon_max_width = 0
-Button/constants/outline_size = 8
-Button/font_sizes/font_size = 50
+Button/constants/outline_size = 6
+Button/font_sizes/font_size = 35
 Button/fonts/font = ExtResource("1_xcxug")
 Button/styles/hover = SubResource("StyleBoxFlat_x7yfk")
 Button/styles/normal = SubResource("StyleBoxFlat_0bwvc")

@@ -48,7 +48,6 @@ script = ExtResource("1_22epy")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
-modulate = Color(0, 0, 0, 1)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -85,23 +84,6 @@ theme_override_constants/margin_left = 50
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_bottom = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/StartQuit"]
-layout_mode = 2
-
-[node name="StartBtn" type="Button" parent="CanvasLayer/Control/StartQuit/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_pvf6k")
-text = "Start Game"
-
-[node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/StartQuit/VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
-layout_mode = 2
-
-[node name="QuitBtn" type="Button" parent="CanvasLayer/Control/StartQuit/VBoxContainer"]
-layout_mode = 2
-theme = ExtResource("2_pvf6k")
-text = "Quit Game"
-
 [node name="PlayerSelection" type="MarginContainer" parent="CanvasLayer/Control"]
 layout_mode = 1
 anchors_preset = 1
@@ -113,22 +95,41 @@ grow_horizontal = 0
 theme_override_constants/margin_top = 30
 theme_override_constants/margin_right = 20
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/PlayerSelection"]
+[node name="PlayerSelectionVbox" type="VBoxContainer" parent="CanvasLayer/Control/PlayerSelection"]
 layout_mode = 2
+size_flags_horizontal = 4
 
-[node name="NewPlayerBtn" type="Button" parent="CanvasLayer/Control/PlayerSelection/VBoxContainer"]
+[node name="NewPlayerBtn" type="Button" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
 layout_mode = 2
 text = "New Player"
 
-[node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/PlayerSelection/VBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="SelectPlayerBtn" type="OptionButton" parent="CanvasLayer/Control/PlayerSelection/VBoxContainer"]
+[node name="SelectPlayerBtn" type="OptionButton" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
 layout_mode = 2
 item_count = 1
 popup/item_0/text = ""
 popup/item_0/id = 0
+
+[node name="VSeparator2" type="VSeparator" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="StartBtn" type="Button" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
+layout_mode = 2
+theme = ExtResource("2_pvf6k")
+text = "Start Game"
+
+[node name="VSeparator3" type="VSeparator" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="QuitBtn" type="Button" parent="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox"]
+layout_mode = 2
+theme = ExtResource("2_pvf6k")
+text = "Quit Game"
 
 [node name="AddNewPlayer" type="AcceptDialog" parent="CanvasLayer/Control/PlayerSelection"]
 title = "New Player"
@@ -169,8 +170,8 @@ libraries = {
 }
 autoplay = "fade-in"
 
-[connection signal="pressed" from="CanvasLayer/Control/StartQuit/VBoxContainer/StartBtn" to="." method="_on_start_btn_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/StartQuit/VBoxContainer/QuitBtn" to="." method="_on_quit_btn_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/VBoxContainer/NewPlayerBtn" to="." method="_on_new_player_btn_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/NewPlayerBtn" to="." method="_on_new_player_btn_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/StartBtn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/QuitBtn" to="." method="_on_quit_btn_pressed"]
 [connection signal="confirmed" from="CanvasLayer/Control/PlayerSelection/AddNewPlayer" to="." method="_on_add_new_player_confirmed"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
