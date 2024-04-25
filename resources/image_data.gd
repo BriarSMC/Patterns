@@ -1,7 +1,12 @@
 class_name ImageData extends Resource
 
 #region Description
-# <description>
+# Image Data Resource
+#
+# Used to load/save image data
+# 
+# NOTE: save() is not used by this game. It is meant only for the PatternsTool
+# used to build the image data structure.
 #endregion
 
 

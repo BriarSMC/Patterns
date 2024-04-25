@@ -3,7 +3,8 @@ extends Node2D
 
 
 #region Description
-# <description>
+# Display and manage the patterns the player needs to find
+#
 #endregion
 
 
@@ -47,7 +48,7 @@ var pattern_numbers: Array[int]
 # Return
 #		None
 #==
-# What the code is doing (steps)
+# Not used, but stub is kept for future versions
 func _ready() -> void:
 	pass
 
@@ -70,19 +71,21 @@ func _ready() -> void:
 # Return
 #	None
 #==
-# What the code is doing (steps)
+# Step 1 - Calculate the positions for various images
+# Step 2 - Position the background image
+# Step 3 - Position the patterns and display then corresponding frame
 func arrange_pattern_boxes(picture: Sprite2D, 
 						   patterns: Array[int], 
 						   available: Array[bool]) -> void:
+# Step 1
 	var x_center := get_viewport_rect().end.x / 2
 	var y_pos := get_viewport_rect().end.y - 50 - Constant.PATTERN_SIZE
 	var cur_x := x_center - ((pattern_blocks.size() / 2.0) * float(Constant.PATTERN_SIZE + 20)) 
-	#var bg_width = (Constant.PATTERN_SIZE + 20) * 5 + 40
-	#var bg_height = Constant.PATTERN_SIZE + 40
+# Step 2
 	background.position = Vector2(x_center - 10 - Constant.PATTERN_SIZE / 2.0, y_pos) + BG_OFFSET
 	background.scale = BG_SCALE
 	background.visible = true
-	
+# Step 3
 	pattern_numbers.clear()
 	
 	for i in pattern_blocks.size():
@@ -98,7 +101,7 @@ func arrange_pattern_boxes(picture: Sprite2D,
 		available[i] = false
 	
 
-# set_pattern_frame(ndx, patterns, avail)
+# set_pattern_frame(frame, patterns, avail)
 # Set the frame number for a pattern node
 #
 # Parameters
@@ -108,7 +111,10 @@ func arrange_pattern_boxes(picture: Sprite2D,
 # Return
 #	None
 #==
-# What the code is doing (steps)
+# Find the next available pattern
+# Get the index for the corresponding frame number
+# If frame isn't found, then just turn off that pattern box
+# Otherwise, set the frame for that pattern box
 func set_new_pattern_frame(frame: int, patterns: Array[int], avail: Array[bool]) -> void:
 	var p = avail.find(true)
 	var i: int = pattern_numbers.find(frame)	

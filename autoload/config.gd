@@ -2,7 +2,15 @@
 extends Node
 
 #region Description
-# <description>
+# This is the configuration "file" for the game.
+#
+# It does the following:
+#
+#	o Keeps track of the current picture key
+#	o Loads the image data from the resource file
+#	o Keeps a global for this data
+#	o Loads the player data from the resource file
+#	o Keeps a global for this data
 #endregion
 
 
@@ -18,11 +26,11 @@ extends Node
 
 # public variables
 
-var current_picture := 0
-var image_data_res: ImageData 
-var image_data := {}
-var player_data_res: PlayerData
-var player_data := {}
+var current_picture := 0				# Current picture to solve
+var image_data_res: ImageData 			# Pointer to the image data resource node
+var image_data := {}					# Pointer to the image data 
+var player_data_res: PlayerData			# Pointer to the player data resource node
+var player_data := {}					# Pointer to the player data 
 
 # private variables
 
@@ -42,6 +50,7 @@ var player_data := {}
 #		None
 #==
 # Get the image data from the resource file
+# Get the player data from the resource file
 func _ready() -> void:
 	image_data_res = ImageData.load_or_create()
 	image_data = image_data_res.image_data
@@ -51,18 +60,30 @@ func _ready() -> void:
 
 # Built-in Signal Callbacks
 
-
 # Custom Signal Callbacks
 
+
+# Public Methods
+
+# get_picture(num)
+# Return the image data corresponding to the value in num
+#
+# Parameters
+#	num: int						Key into the image data
+# Return
+#	Dictionary						A dictionary with the image's data
+#==
+# Convert the value in num to "0000" format
+# See if the key exists in the image dictionary
+# If so, then return a dictionary containing the image's data
+# Otherwise, return an empty dictionary
 func get_picture(num: int) -> Dictionary:
 	var key = ("%04d" % num)
 	if Config.image_data.has(key):
 		return {"image": Constant.PICTURE_DIR + Config.image_data[key].image, "pattern_list": Config.image_data[key].pattern_list}
 	else:
 		return {}
-
-# Public Methods
-
+		
 
 # Private Methods
 

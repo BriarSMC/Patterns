@@ -1,5 +1,6 @@
 extends Node
 
+# Global game constants
 
 const PICTURE_WIDTH := 1200
 const PICTURE_HEIGHT := 800
