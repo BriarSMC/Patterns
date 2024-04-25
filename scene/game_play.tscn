@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnlojcsphsmxi"]
+[gd_scene load_steps=7 format=3 uid="uid://cnlojcsphsmxi"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_qa2nw"]
 [ext_resource type="Texture2D" uid="uid://de37nw4ciqxi1" path="res://images/chalkboard-1.jpg" id="3_cd8gd"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="3_dy2jk"]
+[ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="5_qhglj"]
+[ext_resource type="Script" path="res://script/picture_completed_dialog.gd" id="6_evkwa"]
 
 [node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node")]
 script = ExtResource("1_lf48k")
@@ -32,3 +34,17 @@ texture = ExtResource("3_cd8gd")
 [node name="Overlays" type="Node2D" parent="PictureArea/Picture"]
 
 [node name="Patterns" parent="." instance=ExtResource("3_dy2jk")]
+
+[node name="PictureCompletedDialog" type="AcceptDialog" parent="."]
+title = "Picture Completed"
+initial_position = 2
+size = Vector2i(300, 200)
+always_on_top = true
+theme = ExtResource("5_qhglj")
+ok_button_text = "Next"
+dialog_close_on_escape = false
+dialog_autowrap = true
+script = ExtResource("6_evkwa")
+
+[connection signal="canceled" from="PictureCompletedDialog" to="." method="_on_picture_completed_dialog_canceled"]
+[connection signal="confirmed" from="PictureCompletedDialog" to="." method="_on_picture_completed_dialog_confirmed"]

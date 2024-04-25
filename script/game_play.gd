@@ -13,6 +13,7 @@ extends Node2D
 # signals
 
 signal found_count_zero_set
+signal exit_game_requested
 
 # enums
 
@@ -35,6 +36,8 @@ var box: Rect2
 var patterns: Array[int]
 var patterns_available: Array[bool]
 var found_count: int
+var time_elapsed: float
+var game_running := false
 
 # onready variables
 
@@ -42,6 +45,7 @@ var found_count: int
 @onready var picture := $PictureArea/Picture
 @onready var frame_image := $PictureArea/Picture/FrameImage
 @onready var background = $Background
+@onready var picture_completed_dialog = $PictureCompletedDialog
 
 
 #endregion
@@ -62,6 +66,8 @@ var found_count: int
 # Load the patterns to find and shuffle them
 # Arrange the patterns to find boxes on screen
 func _ready() -> void:
+	exit_game_requested.connect(exit_game)
+	
 	found_count_zero_set.connect(found_count_zero)
 	var vp = get_viewport_rect()
 	
@@ -79,15 +85,21 @@ func _ready() -> void:
 	frame_image.position.x = r.position.x + (r.end.x/2)
 	frame_image.position.y = r.position.y + (r.end.y/2)
 	
-	#patterns.assign(config.pattern_list)
-	#patterns.shuffle()
-		#
-	#patterns_available.resize(patterns.size())
-	#patterns_available.fill(true)
-	#pattern_node.arrange_pattern_boxes(picture, patterns, patterns_available)
-	
-	#found_count = patterns.size()
-	
+	picture_completed_dialog.add_cancel_button("Quit")	
+
+# _process(delta)
+# Called once per frame
+#
+# Parameters
+#	delta: float            	Seconds elapsed since last frame
+# Return
+#	None
+#==
+# Increment timer if game is running
+func _process(delta) -> void:
+	if game_running:
+		time_elapsed += delta
+
 	
 	
 		
@@ -113,8 +125,22 @@ func _input(event: InputEvent) -> void:
 			found_count -= 1
 			if found_count == 0:
 				found_count_zero_set.emit()
+				
 
+		
 # Built-in Signal Callbacks
+
+func _on_picture_completed_dialog_confirmed():
+	Config.current_picture += 1
+	var config = Config.get_picture(Config.current_picture)	
+	if config.is_empty():
+		exit_game_requested.emit()
+	found_count = set_up_image(config, picture, patterns, patterns_available)
+	for obj: Node2D in overlay_node.get_children():
+		obj.queue_free()
+
+func _on_picture_completed_dialog_canceled():
+	exit_game_requested.emit()
 
 
 # Custom Signal Callbacks
@@ -123,15 +149,26 @@ func _input(event: InputEvent) -> void:
 # Go to next picture
 func found_count_zero():
 	print("All patterns found")
-	Config.current_picture += 1
-	var config = Config.get_picture(Config.current_picture)	
-	if config.is_empty():
-		get_tree().quit()
-	else:
-		found_count = set_up_image(config, picture, patterns, patterns_available)
-		for obj: Node2D in overlay_node.get_children():
-			obj.queue_free()
+	game_running = false
+	var hours = time_elapsed / 3600
+	var minutes = time_elapsed / 60
+	var seconds = fmod(time_elapsed, 60)
+	picture_completed_dialog.dialog_text = "You found all patterns in %02d:%02d:%02d" % [hours, minutes, seconds]
+	picture_completed_dialog.show()
 	
+
+# exit_game()
+# Exit the game
+#
+# Parameters
+#	None
+# Return
+#	None
+#==
+# Just up and quit
+func exit_game() -> void:
+	print("Exiting game")
+	get_tree().quit()
 	
 # Public Methods
 
@@ -196,6 +233,8 @@ func set_frame_found(frame: int) -> void:
 #==
 # What the code is doing (steps)
 func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
+	time_elapsed = 0.0
+	game_running = true
 	image.texture = load(config.image)
 	patt.assign(config.pattern_list)
 	patt.shuffle()		

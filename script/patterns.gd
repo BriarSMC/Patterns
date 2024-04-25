@@ -81,6 +81,7 @@ func arrange_pattern_boxes(picture: Sprite2D,
 	#var bg_height = Constant.PATTERN_SIZE + 40
 	background.position = Vector2(x_center - 10 - Constant.PATTERN_SIZE / 2.0, y_pos) + BG_OFFSET
 	background.scale = BG_SCALE
+	background.visible = true
 	
 	pattern_numbers.clear()
 	
