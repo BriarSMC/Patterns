@@ -22,7 +22,7 @@ const found_frame = preload("res://scene/found_frame.tscn")
 
 # exports (The following properties must be set in the Inspector by the designer)
 
-@export var picture_area_vertical_offset := 260
+@export var picture_area_vertical_offset := 43
 @export var pattern_node: Patterns
 @export var overlay_node: Node2D
 
@@ -78,11 +78,6 @@ func _ready() -> void:
 	frame_image.position.x = r.position.x + (r.end.x/2)
 	frame_image.position.y = r.position.y + (r.end.y/2)
 	
-	var ds = DisplayServer.screen_get_size()
-	print ("ds: ", ds)
-	background.scale.x = float(ds.x) / float(background.get_rect().size.x)
-	
-	#dark_screen_sprite.scale = get_viewport().size / Vector2(512,300)
 	patterns.assign(config.pattern_list)
 	patterns.shuffle()
 	printt(patterns)
@@ -170,7 +165,7 @@ func get_frame_clicked(pos: Vector2) -> int:
 # What the code is doing (steps)
 func set_frame_found(frame: int) -> void:
 	var posx := frame % Constant.HFRAME_COUNT * float(Constant.PATTERN_SIZE) + float(Constant.PATTERN_SIZE) / 2.0
-	var posy := float(float(frame) / Constant.HFRAME_COUNT * Constant.PATTERN_SIZE + float(Constant.PATTERN_SIZE) / 2.0)
+	var posy := float(frame / Constant.HFRAME_COUNT * Constant.PATTERN_SIZE + float(Constant.PATTERN_SIZE) / 2.0)
 	var pos := Vector2(posx, posy)
 	var overlay = found_frame.instantiate()
 	overlay.position = pos

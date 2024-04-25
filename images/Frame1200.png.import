@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://l8bjk7u25vks"
-path="res://.godot/imported/stsimon.jpg-7c6ff28039871e0e7f4cd756a53e7975.ctex"
+uid="uid://cpbd2feasemm0"
+path="res://.godot/imported/Frame1200.png-a5f290a07c0b076e2372cbd3697b8b1a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/pictures/stsimon.jpg"
-dest_files=["res://.godot/imported/stsimon.jpg-7c6ff28039871e0e7f4cd756a53e7975.ctex"]
+source_file="res://images/Frame1200.png"
+dest_files=["res://.godot/imported/Frame1200.png-a5f290a07c0b076e2372cbd3697b8b1a.ctex"]
 
 [params]
 

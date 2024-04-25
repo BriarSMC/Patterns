@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://dryh3hb153py2"]
 
-[ext_resource type="Texture2D" uid="uid://bg1fxapr73i24" path="res://images/frame_found150x150.png" id="1_dheec"]
+[ext_resource type="Texture2D" uid="uid://dx6bayaaavsys" path="res://images/frame_found100x100.png" id="1_t7kui"]
 [ext_resource type="Script" path="res://script/found_frame.gd" id="2_uqby6"]
 
 [node name="FoundFrame" type="Sprite2D"]
-texture = ExtResource("1_dheec")
+texture = ExtResource("1_t7kui")
 script = ExtResource("2_uqby6")

@@ -7,10 +7,10 @@ script = ExtResource("1_mk58j")
 image_data = {
 "0000": {
 "image": "stsimon.jpg",
-"pattern_list": [60, 63, 58, 10, 15, 26, 36, 8]
+"pattern_list": [0, 12, 49, 58, 33, 56, 61, 22, 20, 95]
 },
 "0001": {
-"image": "ui-bg.png",
-"pattern_list": [48, 26, 40, 63, 45, 18, 20, 67]
+"image": "ui-bg.jpg",
+"pattern_list": [20, 67, 38, 63, 76, 80, 54, 42, 40, 18, 14]
 }
 }

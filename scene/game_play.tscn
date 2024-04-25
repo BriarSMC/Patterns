@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://cnlojcsphsmxi"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
-[ext_resource type="Texture2D" uid="uid://bhs11gnndd1yn" path="res://images/Frame.png" id="2_6op6t"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_qa2nw"]
+[ext_resource type="Texture2D" uid="uid://de37nw4ciqxi1" path="res://images/chalkboard-1.jpg" id="3_cd8gd"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="3_dy2jk"]
 
 [node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node")]
@@ -11,6 +11,7 @@ pattern_node = NodePath("Patterns")
 overlay_node = NodePath("PictureArea/Picture/Overlays")
 
 [node name="Background" type="Sprite2D" parent="."]
+visible = false
 texture_repeat = 1
 scale = Vector2(4, 2.587)
 texture = ExtResource("2_qa2nw")
@@ -23,8 +24,10 @@ position = Vector2(300, 257)
 centered = false
 
 [node name="FrameImage" type="Sprite2D" parent="PictureArea/Picture"]
-position = Vector2(-500, -297)
-texture = ExtResource("2_6op6t")
+visible = false
+position = Vector2(741.5, 194.5)
+scale = Vector2(1.46556, 2.56286)
+texture = ExtResource("3_cd8gd")
 
 [node name="Overlays" type="Node2D" parent="PictureArea/Picture"]
 

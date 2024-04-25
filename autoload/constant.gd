@@ -1,9 +1,9 @@
 extends Node
 
 
-const PICTURE_WIDTH := 1800
-const PICTURE_HEIGHT := 1200
-const PATTERN_SIZE := 150
+const PICTURE_WIDTH := 1200
+const PICTURE_HEIGHT := 800
+const PATTERN_SIZE := 100
 const HFRAME_COUNT := 12
 const VFRAME_COUNT := 8
 

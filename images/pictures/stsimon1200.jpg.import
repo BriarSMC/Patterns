@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ci3jaep675aro"
-path="res://.godot/imported/ui-bg.png-70787f3d1a196bf02fe28ea425ad4618.ctex"
+uid="uid://g2g73451kih8"
+path="res://.godot/imported/stsimon1200.jpg-384040b1cc328bcae43205ff24349ffa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://images/pictures/ui-bg.png"
-dest_files=["res://.godot/imported/ui-bg.png-70787f3d1a196bf02fe28ea425ad4618.ctex"]
+source_file="res://images/pictures/stsimon1200.jpg"
+dest_files=["res://.godot/imported/stsimon1200.jpg-384040b1cc328bcae43205ff24349ffa.ctex"]
 
 [params]
 

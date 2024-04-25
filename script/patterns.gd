@@ -15,6 +15,10 @@ extends Node2D
 
 # constants
 
+const BG_OFFSET = Vector2(0, 40)
+const BG_SCALE = Vector2(0.8, 0.5)
+const PATT_OFFSET = Vector2(0, 40)
+
 # exports (The following properties must be set in the Inspector by the designer)
 
 @export var pattern_blocks: Array[Sprite2D]
@@ -73,13 +77,14 @@ func arrange_pattern_boxes(picture: Sprite2D,
 	var x_center := get_viewport_rect().end.x / 2
 	var y_pos := get_viewport_rect().end.y - 50 - Constant.PATTERN_SIZE
 	var cur_x := x_center - ((pattern_blocks.size() / 2.0) * float(Constant.PATTERN_SIZE + 20)) 
-	var bg_width = (Constant.PATTERN_SIZE + 20) * 5 + 40
-	var bg_height = Constant.PATTERN_SIZE + 40
-	background.position = Vector2(x_center - 10 - Constant.PATTERN_SIZE / 2.0, y_pos)
+	#var bg_width = (Constant.PATTERN_SIZE + 20) * 5 + 40
+	#var bg_height = Constant.PATTERN_SIZE + 40
+	background.position = Vector2(x_center - 10 - Constant.PATTERN_SIZE / 2.0, y_pos) + BG_OFFSET
+	background.scale = BG_SCALE
 	
 	for i in pattern_blocks.size():
-		pattern_blocks[i].position.y = y_pos
-		pattern_blocks[i].position.x = cur_x
+		pattern_blocks[i].position.y = y_pos + PATT_OFFSET.y
+		pattern_blocks[i].position.x = cur_x + PATT_OFFSET.x
 		cur_x += Constant.PATTERN_SIZE + 20
 		pattern_blocks[i].texture = picture.texture
 		pattern_blocks[i].hframes = Constant.HFRAME_COUNT
