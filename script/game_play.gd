@@ -67,7 +67,8 @@ func _ready() -> void:
 	
 	var config = Config.get_picture(Config.current_picture)
 	
-	picture.texture = load(config.image)
+	found_count = set_up_image(config, picture, patterns, patterns_available)
+	#picture.texture = load(config.image)
 	picture.region_rect = Rect2(0, 0, Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT)
 	picture.position.x = vp.end.x / 2.0 - (float(Constant.PICTURE_WIDTH) / 2.0)
 	picture.position.y = picture_area_vertical_offset
@@ -78,15 +79,14 @@ func _ready() -> void:
 	frame_image.position.x = r.position.x + (r.end.x/2)
 	frame_image.position.y = r.position.y + (r.end.y/2)
 	
-	patterns.assign(config.pattern_list)
-	patterns.shuffle()
-	printt(patterns)
-		
-	patterns_available.resize(patterns.size())
-	patterns_available.fill(true)
-	pattern_node.arrange_pattern_boxes(picture, patterns, patterns_available)
+	#patterns.assign(config.pattern_list)
+	#patterns.shuffle()
+		#
+	#patterns_available.resize(patterns.size())
+	#patterns_available.fill(true)
+	#pattern_node.arrange_pattern_boxes(picture, patterns, patterns_available)
 	
-	found_count = patterns.size()
+	#found_count = patterns.size()
 	
 	
 	
@@ -119,8 +119,19 @@ func _input(event: InputEvent) -> void:
 
 # Custom Signal Callbacks
 
+# All patterns found
+# Go to next picture
 func found_count_zero():
 	print("All patterns found")
+	Config.current_picture += 1
+	var config = Config.get_picture(Config.current_picture)	
+	if config.is_empty():
+		get_tree().quit()
+	else:
+		found_count = set_up_image(config, picture, patterns, patterns_available)
+		for obj: Node2D in overlay_node.get_children():
+			obj.queue_free()
+	
 	
 # Public Methods
 
@@ -173,6 +184,28 @@ func set_frame_found(frame: int) -> void:
 
 	pattern_node.set_new_pattern_frame(frame, patterns, patterns_available)
 		
+		
+# set_up_image(image)
+# Load the specified image
+#
+# Parameters
+#	param: type						Description
+# Return
+#	None
+#	value							Description
+#==
+# What the code is doing (steps)
+func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
+	image.texture = load(config.image)
+	patt.assign(config.pattern_list)
+	patt.shuffle()		
+	patt_available.resize(patt.size())
+	patt_available.fill(true)	
+
+	pattern_node.arrange_pattern_boxes(image, patt, patt_available)	
+	
+	return patt.size()
+	
 	
 # Subclasses
 

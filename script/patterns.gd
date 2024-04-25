@@ -82,6 +82,8 @@ func arrange_pattern_boxes(picture: Sprite2D,
 	background.position = Vector2(x_center - 10 - Constant.PATTERN_SIZE / 2.0, y_pos) + BG_OFFSET
 	background.scale = BG_SCALE
 	
+	pattern_numbers.clear()
+	
 	for i in pattern_blocks.size():
 		pattern_blocks[i].position.y = y_pos + PATT_OFFSET.y
 		pattern_blocks[i].position.x = cur_x + PATT_OFFSET.x
@@ -90,8 +92,8 @@ func arrange_pattern_boxes(picture: Sprite2D,
 		pattern_blocks[i].hframes = Constant.HFRAME_COUNT
 		pattern_blocks[i].vframes = Constant.VFRAME_COUNT
 		pattern_blocks[i].frame = patterns[i]
-		printt("i", i, "pattern #", patterns[i], "pos", pattern_blocks[i].position)
 		pattern_numbers.append(patterns[i])
+		pattern_blocks[i].visible = true
 		available[i] = false
 	
 

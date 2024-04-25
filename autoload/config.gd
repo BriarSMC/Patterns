@@ -56,7 +56,10 @@ func _ready() -> void:
 
 func get_picture(num: int) -> Dictionary:
 	var key = ("%04d" % num)
-	return {"image": Constant.PICTURE_DIR + Config.image_data[key].image, "pattern_list": Config.image_data[key].pattern_list}
+	if Config.image_data.has(key):
+		return {"image": Constant.PICTURE_DIR + Config.image_data[key].image, "pattern_list": Config.image_data[key].pattern_list}
+	else:
+		return {}
 
 # Public Methods
 
