@@ -27,6 +27,8 @@ extends Node
 # public variables
 
 var current_picture := 0				# Current picture to solve
+var current_player_data := {}			# Current player data
+var current_player: String
 var image_data_res: ImageData 			# Pointer to the image data resource node
 var image_data := {}					# Pointer to the image data 
 var player_data_res: PlayerData			# Pointer to the player data resource node

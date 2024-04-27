@@ -1,10 +1,13 @@
 class_name PlayerData extends Resource
 
 #region Description
-# player_data
-#	"name_key"			String in uppercase
-#	"name"				Name as entered
-#	"current_picture"	Integer
+# last_player:
+#	player name key
+# players:
+# 	player_data
+#		"name_key"			String in uppercase
+#		"name"				Name as entered
+#		"current_picture"	Integer
 #
 #endregion
 
@@ -17,7 +20,7 @@ class_name PlayerData extends Resource
 
 # constants
 
-const resource_file_name := "user://player_data.res"
+const resource_file_name := "user://player_data.tres"
 
 # exports (The following properties must be set in the Inspector by the designer)
 

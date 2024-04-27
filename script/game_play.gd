@@ -150,19 +150,9 @@ func _input(event: InputEvent) -> void:
 # Built-in Signal Callbacks
 
 # Confirmation from PictureCompletedDialog
-# Point to the next puzzle image
-# Get it's image data 
-# If no more images exist, then exit the game
-# Otherwise, load the image and set the pattern counter and delete any drawings
-# from prevous play.
+# Go to the next picture
 func _on_picture_completed_dialog_confirmed():
-	Config.current_picture += 1
-	var config = Config.get_picture(Config.current_picture)	
-	if config.is_empty():
-		exit_game_requested.emit()
-	found_count = set_up_image(config, picture, patterns, patterns_available)
-	for obj: Node2D in overlay_node.get_children():
-		obj.queue_free()
+	next_picture()
 		
 
 # Exit from PictureCompletedDialog
@@ -170,6 +160,14 @@ func _on_picture_completed_dialog_confirmed():
 func _on_picture_completed_dialog_canceled():
 	exit_game_requested.emit()
 
+
+func _on_next_picture_pressed():
+	next_picture()
+
+
+# Quit button just exits the game
+func _on_quit_pressed():
+	exit_game()
 
 # Custom Signal Callbacks
 
@@ -203,7 +201,6 @@ func found_count_zero():
 #==
 # Just up and quit
 func exit_game() -> void:
-	print("Exiting game")
 	get_tree().quit()
 	
 # Public Methods
@@ -289,5 +286,29 @@ func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
 	return patt.size()
 	
 	
+# next_picture()
+# Go to the next picture
+#
+# Parameters
+#	None
+# Return
+#	None
+#==
+# Point to the next puzzle image
+# Get it's image data 
+# If no more images exist, then exit the game
+# Otherwise, load the image and set the pattern counter and delete any drawings
+# from prevous play.
+func next_picture() -> void:
+	Config.current_picture += 1
+	var config = Config.get_picture(Config.current_picture)	
+	if config.is_empty():
+		exit_game_requested.emit()
+	found_count = set_up_image(config, picture, patterns, patterns_available)
+	for obj: Node2D in overlay_node.get_children():
+		obj.queue_free()
+		
+	
 # Subclasses
+
 

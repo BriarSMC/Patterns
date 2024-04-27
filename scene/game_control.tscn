@@ -171,6 +171,7 @@ libraries = {
 autoplay = "fade-in"
 
 [connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/NewPlayerBtn" to="." method="_on_new_player_btn_pressed"]
+[connection signal="item_selected" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/SelectPlayerBtn" to="." method="_on_select_player_btn_item_selected"]
 [connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/StartBtn" to="." method="_on_start_btn_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/PlayerSelection/PlayerSelectionVbox/QuitBtn" to="." method="_on_quit_btn_pressed"]
 [connection signal="confirmed" from="CanvasLayer/Control/PlayerSelection/AddNewPlayer" to="." method="_on_add_new_player_confirmed"]

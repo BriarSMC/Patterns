@@ -55,13 +55,22 @@ const GAME_PLAY = preload("res://scene/game_play.tscn")
 #		None
 #==
 # Step 1
-# 	If the player data structure is empty, then hide the option button
-# 	Otherwise, load it
+# 	If the player data structure is empty, then
+# 		initialize the data dictionary with a blank last_player value
+#		and save it
+#	If the player data structure has one or less elements, then
+#		hide the option button (Means the dictionary only has the last_player in it)
+# 	Otherwise, load the players into the  option button
 # Step 2
 # 	Set up the add player popup window
 func _ready() -> void:
 # Step 1
 	if Config.player_data.size() == 0:
+		Config.player_data["last_player"] = ""
+		Config.player_data["players"] = {}
+		Config.player_data_res.save()
+		
+	if Config.player_data.size() <= 1:
 		select_player_btn.visible = false
 	else:
 		load_players()
@@ -117,6 +126,12 @@ func _on_add_new_player_confirmed():
 	add_new_player_confirmed()
 
 
+# New player selected from list
+func _on_select_player_btn_item_selected(index):
+	Config.player_data["last_player"] = select_player_btn.get_item_text(index).to_upper()
+	set_current_player(Config.player_data["last_player"])
+	Config.player_data_res.save()
+	
 # Animation is finished.
 # Change to GamePlay scene if 'fade-out'
 func _on_animation_player_animation_finished(anim_name):
@@ -149,8 +164,13 @@ func load_players() -> void:
 	else:
 		select_player_btn.visible = true
 		select_player_btn.clear()
-		for data in Config.player_data:
-			select_player_btn.add_item(Config.player_data[data].name)
+		var idx := 0
+		for name_key in Config.player_data.players:
+			select_player_btn.add_item(Config.player_data.players[name_key].name)
+			if name_key == Config.player_data["last_player"]:
+				select_player_btn.select(idx)
+				set_current_player(name_key)
+			idx += 1
 
 
 # add_new_player_confirmed()
@@ -178,13 +198,30 @@ func add_new_player_confirmed() -> void:
 		error_message.visible = true
 # Step 4
 	else:	
-		Config.player_data[name_key] = {"name": name_new, "current_picture": 0}
+		Config.player_data["last_player"] = name_key
+		Config.player_data["players"][name_key] = {"name": name_new, "current_picture": 0}
 		Config.player_data_res.save()
 		load_players()
 # Step 5
 	player_name.text = ""
 	
-	
+
+# set_current_player(player)
+# Set the current player
+#
+# Parameters
+#	player: String					Name/Index of the current player
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func set_current_player(player) -> void:
+	Config.current_player = player
+	Config.current_player_data = Config.player_data.players[player]
+	Config.current_picture = Config.current_player_data.current_picture
+
+
 # Subclasses
+
 
 
