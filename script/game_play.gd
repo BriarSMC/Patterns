@@ -301,6 +301,10 @@ func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
 # from prevous play.
 func next_picture() -> void:
 	Config.current_picture += 1
+	Config.current_player_data.current_picture = Config.current_picture
+	Config.player_data.players[Config.current_player] = Config.current_player_data
+	Config.player_data_res.save()
+
 	var config = Config.get_picture(Config.current_picture)	
 	if config.is_empty():
 		exit_game_requested.emit()

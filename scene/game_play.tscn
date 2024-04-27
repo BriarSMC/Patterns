@@ -47,6 +47,7 @@ dialog_autowrap = true
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
+anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 120.0
