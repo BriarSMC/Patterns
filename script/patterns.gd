@@ -101,6 +101,22 @@ func arrange_pattern_boxes(picture: Sprite2D,
 		available[i] = false
 	
 
+# is_current_frame(frame)
+# Test if frame is in our pattern numbers array
+#
+# Parameters
+#	frame: int						Frame number to look for
+# Return
+#	bool							true = Found, false = Not found
+#==
+# What the code is doing (steps)
+func is_current_frame(frame: int) -> bool:
+	if pattern_numbers.find(frame) != -1:
+		return true
+	else:
+		return false
+
+
 # set_pattern_frame(frame, patterns, avail)
 # Set the frame number for a pattern node
 #

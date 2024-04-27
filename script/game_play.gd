@@ -125,7 +125,7 @@ func _process(delta) -> void:
 # Step 1: Cancel - Just exit the game
 # Step 2:  Left mouse button click
 #	Find out if the player clicked on the image and, if so, which frame was clicked
-# Step 3: If image was clicked
+# Step 3: If image was clicked and only if the pattern is in the list on the screen
 #	Draw a box around the frame
 #	Decrement the patterns found counter
 #	If there are not more patterns to find, then emit the appropriate signal
@@ -139,7 +139,7 @@ func _input(event: InputEvent) -> void:
 		event.pressed): 
 		var frame := get_frame_clicked(event.position)
 # Step 3
-		if frame >= 0 and patterns.find(frame) != -1:
+		if frame >= 0 and pattern_node.is_current_frame(frame):
 			set_frame_found(frame)
 			found_count -= 1
 			if found_count == 0:
