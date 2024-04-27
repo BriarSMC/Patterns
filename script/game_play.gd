@@ -23,7 +23,7 @@ const found_frame = preload("res://scene/found_frame.tscn")
 
 # exports (The following properties must be set in the Inspector by the designer)
 
-@export var picture_area_vertical_offset := 43
+@export var picture_area_vertical_offset := 43 + 50
 @export var pattern_node: Patterns
 @export var overlay_node: Node2D
 
@@ -91,6 +91,8 @@ func _ready() -> void:
 	var r: Rect2 = picture.get_rect()
 	frame_image.position.x = r.position.x + (r.end.x/2)
 	frame_image.position.y = r.position.y + (r.end.y/2)
+	# Make sure the frame is behind the picture
+	frame_image.z_index = -1
 	
 	picture_completed_dialog.add_cancel_button("Quit")	
 

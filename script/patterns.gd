@@ -16,9 +16,9 @@ extends Node2D
 
 # constants
 
-const BG_OFFSET = Vector2(0, 40)
+const BG_OFFSET = Vector2(0, 40 + 20)
 const BG_SCALE = Vector2(0.8, 0.5)
-const PATT_OFFSET = Vector2(0, 40)
+const PATT_OFFSET = Vector2(0, 40 + 20)
 
 # exports (The following properties must be set in the Inspector by the designer)
 
