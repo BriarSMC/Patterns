@@ -6,11 +6,13 @@
 script = ExtResource("1_mk58j")
 image_data = {
 "0000": {
-"image": "stsimon.jpg",
-"pattern_list": [0, 12, 49, 58, 33, 56, 61, 22, 20, 95]
+"image": "0000855_dsc.jpg",
+"pattern_list": [6402, 5697, 5241, 1233, 6505],
+"pos_list": [Vector2(1746, 730), Vector2(1898, 675), Vector2(2133, 637), Vector2(1654, 303), Vector2(1575, 743)]
 },
 "0001": {
-"image": "ui-bg.jpg",
-"pattern_list": [20, 67, 38, 63, 76, 80, 54, 42, 40, 18, 14]
+"image": "0000786_dsc.jpg",
+"pattern_list": [7688, 4717, 1024, 3394, 3729],
+"pos_list": [Vector2(1746, 730), Vector2(1898, 675), Vector2(2133, 637), Vector2(1654, 303), Vector2(1575, 743), Vector2(1406, 842), Vector2(1695, 594), Vector2(1961, 283), Vector2(1666, 487), Vector2(1416, 510)]
 }
 }

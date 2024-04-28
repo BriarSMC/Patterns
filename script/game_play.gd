@@ -228,10 +228,11 @@ func get_frame_clicked(pos: Vector2) -> int:
 	var frame_number: int 	
 	var boxl = pos.x - box.position.x
 	var boxh = pos.y - box.position.y
-	var segx: int = boxl / Constant.PATTERN_SIZE
-	var segy: int = boxh / Constant.PATTERN_SIZE
-	frame_number = segx + (segy * 12)
-
+	var segx: int = boxl / Constant.FRAME_SCALE
+	var segy: int = boxh / Constant.FRAME_SCALE
+	frame_number = segx + (segy * Constant.HFRAME_COUNT)
+	printt("Get Frame Clicked: ", frame_number)
+	
 	return frame_number
 
 

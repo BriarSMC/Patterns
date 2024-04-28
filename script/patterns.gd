@@ -93,14 +93,17 @@ func arrange_pattern_boxes(picture: Sprite2D,
 		pattern_blocks[i].position.x = cur_x + PATT_OFFSET.x
 		cur_x += Constant.PATTERN_SIZE + 20
 		pattern_blocks[i].texture = picture.texture
-		pattern_blocks[i].hframes = Constant.HFRAME_COUNT
-		pattern_blocks[i].vframes = Constant.VFRAME_COUNT
-		pattern_blocks[i].frame = patterns[i]
-		pattern_numbers.append(patterns[i])
+		pattern_blocks[i].hframes = Constant.HFRAME_COUNT / Constant.FRAME_SCALE
+		pattern_blocks[i].vframes = Constant.VFRAME_COUNT / Constant.FRAME_SCALE
+		pattern_blocks[i].frame = patterns[i] / 100 # pow(Constant.FRAME_SCALE, 2)
+		pattern_numbers.append(patterns[i] / 100)
 		pattern_blocks[i].visible = true
 		available[i] = false
 	
-
+	print(patterns)
+	print(pattern_numbers)
+	
+	
 # is_current_frame(frame)
 # Test if frame is in our pattern numbers array
 #
@@ -111,7 +114,7 @@ func arrange_pattern_boxes(picture: Sprite2D,
 #==
 # What the code is doing (steps)
 func is_current_frame(frame: int) -> bool:
-	if pattern_numbers.find(frame) != -1:
+	if pattern_numbers.find(frame / 100) != -1:
 		return true
 	else:
 		return false
