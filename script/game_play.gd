@@ -1,10 +1,33 @@
-class_name GamePlay
+class_name GamePlayNew
 extends Node2D
 
 
+
 #region Description
-# Controls the game play
+# Main game loop for the game
 #
+# Player finds a small square in the puzzle image matching a pattern image (small square
+# in the puzzle image).
+#
+# The game displays a puzzle image to the player. Beneath this image is a list of pattern
+# images in the Patterns area. The player needs to find these patterns in the puzzle image. 
+# The user left clicks the # puzzle image where the player thinks the pattern image is located. 
+# If player is correct, then the pattern image is replaced in the list of pattern images with 
+# the next available pattern image. 
+# 
+# The puzzle's images are loaded from the image_data resource. This is a dictionary
+# containing a dictionary of images. Each image has a puzzle number/key ("0000"-"9999").
+# An image's dictionary entry has it's filename and an array of arrays with position data.
+# Each subarray consists of two Rect2 elements. They are the local position and global
+# position of each pattern in the puzzle image.
+#
+# When a new puzzle image is loaded we load the patterns array and patterns_available
+# arrays. The patterns array is a copy of the Rect2 array in the resource file for the image.
+# We then shuffle the patterns array for randomness in the game. The patterns_available
+# array consist of a boolean for each entry in patterns. True means the corresponding patterns
+# element is available to display in the Patterns area. 
+#
+# 
 #endregion
 
 
@@ -12,41 +35,60 @@ extends Node2D
 
 # signals
 
-signal found_count_zero_set
-signal exit_game_requested
+signal patterns_remaining_count_is_zero	# find_cound has reached zero
+signal exit_game_requested				# we should exit the game
 
 # enums
+#
+# rect2_type						Indecies to the patterns array entry
+
+enum rect2_type {LOCAL_POSITION, GLOBAL_POSITION}
 
 # constants
+#
+# FOUND_FRAME	Used to draw a frame around a pattern location when player clicks (finds) it
 
-const found_frame = preload("res://scene/found_frame.tscn")
+const FOUND_FRAME = preload("res://scene/found_frame.tscn")
+const PATTERN_OFFSET_VECTOR := Vector2(Constant.PATTERN_SIZE / 2, Constant.PATTERN_SIZE / 2)
 
 # exports (The following properties must be set in the Inspector by the designer)
+#
+# picture_area_vertical_offset		Used to position the picture vertically on the screen
+# pattern_node						Pointer to Patterns node
+# overlay_node						Pointer for parent node for instantiated  FoundFrame nodes
 
-@export var picture_area_vertical_offset := 43 + 50
+@export var picture_area_vertical_offset := 43 + 50		# Kinda set visually in the 2D editor
 @export var pattern_node: Patterns
 @export var overlay_node: Node2D
 
 # public variables
 
 # private variables
-#var patterns_to_find: Array
-var picture_src: String
-var box: Rect2
-var patterns: Array[int]
+#
+# picture_rect						Rect2 of the puzzle's image
+# patterns							Array of Rect2 defining each pattern to be found
+# patterns_available				Corresponding patterns elements are available for Patterns area
+# patterns_remaining_count			Number of patterns yet to be found
+# time_elapsed						Amount of time player used solving the puzzle image
+# add_delta_time					True = add the delta time the delta time to time_elapsed
+#									The purpose of this switch is to determine when to add the
+#									delta time in _process() to the time_elapsed variable. We set 
+#									it to true when we display a new puzzle picture, and turn it
+#									off when player has found all the patterns.
+var picture_rect: Rect2
+var patterns: Array	
 var patterns_available: Array[bool]
-var found_count: int
+var patterns_remaining_count: int
 var time_elapsed: float
-var game_running := false
+var add_delta_time := false
 
 # onready variables
 
 @onready var picture_area := $PictureArea
 @onready var picture := $PictureArea/Picture
-@onready var frame_image := $PictureArea/Picture/FrameImage
+@onready var picture_border_image := $PictureArea/Picture/BorderImage
 @onready var background = $Background
 @onready var picture_completed_dialog = $PictureCompletedDialog
-
 
 #endregion
 
@@ -70,31 +112,32 @@ var game_running := false
 #	Position the image on the screen
 # Step 4 - Create Rect2 of the picture
 # 	Used for detecting mouse button clicks on the picture
-# Step 5 - Position the frame around the puzzle image
+# Step 5 - Position the border around the puzzle image
 # Step 6 - Add a QUIT button to the popup used when all patterns have been found
 func _ready() -> void:
 # Step 1
 	exit_game_requested.connect(exit_game)	
-	found_count_zero_set.connect(found_count_zero)
+	patterns_remaining_count_is_zero.connect(find_count_zero)
 # Step 2
 	var vp = get_viewport_rect()	
 	var config = Config.get_picture(Config.current_picture)	
 # Step 3
-	found_count = set_up_image(config, picture, patterns, patterns_available)
+	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
 	picture.region_rect = Rect2(0, 0, Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT)
 	picture.position.x = vp.end.x / 2.0 - (float(Constant.PICTURE_WIDTH) / 2.0)
 	picture.position.y = picture_area_vertical_offset
 # Step 4
-	box = Rect2(picture.position, 
+	picture_rect = Rect2(picture.position, 
 			Vector2(Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT))
 # Step 5
 	var r: Rect2 = picture.get_rect()
-	frame_image.position.x = r.position.x + (r.end.x/2)
-	frame_image.position.y = r.position.y + (r.end.y/2)
+	picture_border_image.position.x = r.position.x + (r.end.x/2)
+	picture_border_image.position.y = r.position.y + (r.end.y/2)
 	# Make sure the frame is behind the picture
-	frame_image.z_index = -1
-	
+	picture_border_image.z_index = -1
+# Step 6
 	picture_completed_dialog.add_cancel_button("Quit")	
+
 
 # _process(delta)
 # Called once per frame
@@ -104,14 +147,11 @@ func _ready() -> void:
 # Return
 #	None
 #==
-# Increment timer if game is running
+# If the puzzle is active, then update the time elapsed
 func _process(delta) -> void:
-	if game_running:
+	if add_delta_time:
 		time_elapsed += delta
-
 	
-	
-		
 # _input(event)
 # Look for mouse clicks
 #
@@ -137,16 +177,16 @@ func _input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton and 
 		event.button_index == MOUSE_BUTTON_LEFT and 
 		event.pressed): 
-		var frame := get_frame_clicked(event.position)
+		var patt_ndx := mouse_in_existing_pattern(event.position)
 # Step 3
-		if frame >= 0 and pattern_node.is_current_frame(frame):
-			set_frame_found(frame)
-			found_count -= 1
-			if found_count == 0:
-				found_count_zero_set.emit()
+		if patt_ndx >= 0 and pattern_node.is_a_current_pattern(patt_ndx):
+			set_pattern_found(patt_ndx)
+			patterns_remaining_count -= 1
+			if patterns_remaining_count == 0:
+				patterns_remaining_count_is_zero.emit()
 				
 
-		
+
 # Built-in Signal Callbacks
 
 # Confirmation from PictureCompletedDialog
@@ -161,17 +201,10 @@ func _on_picture_completed_dialog_canceled():
 	exit_game_requested.emit()
 
 
-func _on_next_picture_pressed():
-	next_picture()
-
-
-# Quit button just exits the game
-func _on_quit_pressed():
-	exit_game()
 
 # Custom Signal Callbacks
 
-# found_count_zero()
+# find_count_zero()
 # Signal handler for when they player has found all the patters.
 #
 # Parameters
@@ -179,11 +212,11 @@ func _on_quit_pressed():
 # Return
 #	None
 #==
-# Turn off the timers and any other _process statements
-# Calculate how much time it took the player to find all the patterns
+# Turn off the time_elapsed accumulator
+# Calculate how much time components it took the player to find all the patterns
 # Display the elapsed time in PictureCompletedDialog popup
-func found_count_zero():
-	game_running = false
+func find_count_zero():
+	add_delta_time = false
 	var hours = time_elapsed / 3600
 	var minutes = time_elapsed / 60
 	var seconds = fmod(time_elapsed, 60)
@@ -203,64 +236,81 @@ func found_count_zero():
 func exit_game() -> void:
 	get_tree().quit()
 	
+	
 # Public Methods
 
 
 # Private Methods
 
+# set_pattern_found(index)
+# Player cliced on one of our pattern frames
+#
+# Parameters
+#	index: int					Index of the pattern found
+# Return
+#	None
+#==
+# Step 1 - Create a FoundFrame instance
+# Step 2 - Place it on the screen
+# Step 3 - Display a new pattern in the Patterns node
+func set_pattern_found(index: int) -> void:
+# Step 1
+	var overlay = FOUND_FRAME.instantiate()
+	overlay.pattern_index = index
+# Step 2
+	#overlay.position = patterns[index][rect2_type.LOCAL_POSITION] # rect.position
+	overlay_node.add_child(overlay)
+	overlay.position = patterns[index][0].position + PATTERN_OFFSET_VECTOR
+	overlay.region_rect = patterns[index][rect2_type.LOCAL_POSITION]
+
+# Step 3
+	pattern_node.display_next_available_pattern(index, patterns, patterns_available)
+	
+# delete_found_frames()
+# Remove all the FoundFrame objects from the puzzle image
+#
+# Parameters
+#	None
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func delete_found_frames() -> void:
+	for o in overlay_node.get_children():
+		if o is FoundFrame:
+			o.queue_free()
+
+
 # get_frame_clicked(pos)
-# Check if mouse clicked in the picture.
-# If so, then return what animation frame was clicked
+# Check if mouse clicked in one of the patterns displayed in Patterns
+# If so, then return index of the pattern in patterns
 #
 # Parameters
 #	pos: Vector2					Mouse position at time of click
 # Return
-#	int								Frame number corresponding to click position
-#	-1								Click wasn't in the picture
+#	int								Pattern index corresponding to click position
+#	-1								Not one of the patterns
 #==
-# Check if the position is in the box.
+# Step 1 - Return -1 if click outside of the puzzle image
 # If not, then return -1
 # Calculate the frame number and return it
-func get_frame_clicked(pos: Vector2) -> int:
-	if not box.has_point(pos):
+func mouse_in_existing_pattern(pos: Vector2) -> int:
+# Step 1
+	if not picture_rect.has_point(pos):
 		return -1
-		
-	var frame_number: int 	
-	var boxl = pos.x - box.position.x
-	var boxh = pos.y - box.position.y
-	var segx: int = boxl / Constant.FRAME_SCALE
-	var segy: int = boxh / Constant.FRAME_SCALE
-	frame_number = segx + (segy * Constant.HFRAME_COUNT)
-	printt("Get Frame Clicked: ", frame_number)
+# Step 2
+	var retval: int = -1
+	for i in patterns.size():
+		var rect2: Rect2 = patterns[i][0]
+		rect2.position.x = rect2.position.x + picture_rect.position.x
+		rect2.position.y = rect2.position.y + picture_rect.position.y
+		if rect2.has_point(pos): # patterns[i][rect2_type.LOCAL_POSITION].has_point(pos):
+			retval = i
+	printt("Pattern clicked: ", retval)
 	
-	return frame_number
+	return retval
 
 
-# set_frame_found(frame)
-# Player cliced on one of our pattern frames
-# Display an image over the frame so show the player found a pattern
-#
-# Parameters
-#	frame: int						Frame number found
-# Return
-#	None
-#==
-# Calculate a position for the pattern-found-image
-# Create a new instance of that image
-# Set its position
-# Add it to the Overlays node
-# Set data indicating the player found the pattern
-func set_frame_found(frame: int) -> void:
-	var posx := frame % Constant.HFRAME_COUNT * float(Constant.PATTERN_SIZE) + float(Constant.PATTERN_SIZE) / 2.0
-	var posy := float(frame / Constant.HFRAME_COUNT * Constant.PATTERN_SIZE + float(Constant.PATTERN_SIZE) / 2.0)
-	var pos := Vector2(posx, posy)
-	var overlay = found_frame.instantiate()
-	overlay.position = pos
-	overlay_node.add_child(overlay)
-
-	pattern_node.set_new_pattern_frame(frame, patterns, patterns_available)
-		
-		
 # set_up_image(image)
 # Start a new game round
 #
@@ -272,21 +322,33 @@ func set_frame_found(frame: int) -> void:
 # Return
 #	int								Number of patterns in this image
 #==
-# What the code is doing (steps)
+# Step 1 - Reset and turn on the timer
+# Step 2 - Load the puzzle's image
+# Step 3 - Make a copy of the patterns array and randomize it
+# Step 4 - Set up the patterns available array as true
+# Step 5 - Display the first N patterns in the pattern area
+# Step 6 - Delete any FoundFrame objects from previous puzzle
+# Step 7 - Return the number of patterns
 func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
+# Step 1
 	time_elapsed = 0.0
-	game_running = true
+	add_delta_time = true
+# Step 2
 	image.texture = load(config.image)
+# Step 3
 	patt.assign(config.pattern_list)
 	patt.shuffle()		
+# Step 4
 	patt_available.resize(patt.size())
 	patt_available.fill(true)	
-
+# Step 5
 	pattern_node.arrange_pattern_boxes(image, patt, patt_available)	
-	
+# Step 6
+	delete_found_frames()
+# Step 7
 	return patt.size()
-	
-	
+
+
 # next_picture()
 # Go to the next picture
 #
@@ -305,15 +367,14 @@ func next_picture() -> void:
 	Config.current_player_data.current_picture = Config.current_picture
 	Config.player_data.players[Config.current_player] = Config.current_player_data
 	Config.player_data_res.save()
-
+	
 	var config = Config.get_picture(Config.current_picture)	
 	if config.is_empty():
 		exit_game_requested.emit()
-	found_count = set_up_image(config, picture, patterns, patterns_available)
+	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
 	for obj: Node2D in overlay_node.get_children():
 		obj.queue_free()
 		
-	
+
+
 # Subclasses
-
-

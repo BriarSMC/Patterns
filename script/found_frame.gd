@@ -1,6 +1,11 @@
 class_name FoundFrame
 extends Sprite2D
 
-# Just store the corresponding frame number with this frame instance
+#region Description
+# When a player clicks on a region of the picture with a corresponding pattern location, 
+# then this node is used to display a frame around the pattern location.
+#endregion
 
-var frame_number: int
+# Just store the corresponding index into the pattern_vectors array
+
+var pattern_index: int

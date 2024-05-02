@@ -4,5 +4,6 @@
 [ext_resource type="Script" path="res://script/found_frame.gd" id="2_uqby6"]
 
 [node name="FoundFrame" type="Sprite2D"]
+editor_description = "When a player clicks on a region of the picture with a corresponding pattern location, then this node is used to display a frame around the pattern location."
 texture = ExtResource("1_t7kui")
 script = ExtResource("2_uqby6")
