@@ -133,7 +133,9 @@ func _ready() -> void:
 	picture_border_image.z_index = -1
 # Step 6
 	picture_completed_dialog.add_cancel_button("Quit")	
-
+	# https://forum.godotengine.org/t/how-to-center-dialog-text-of-a-acceptdialog/16235/5
+	picture_completed_dialog.get_child(1, true).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	picture_completed_dialog.visible = false
 
 # _process(delta)
 # Called once per frame
