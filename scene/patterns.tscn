@@ -12,11 +12,16 @@ visible = false
 texture = ExtResource("2_ksfdx")
 
 [node name="Patt1" type="Sprite2D" parent="."]
+region_enabled = true
 
 [node name="Patt2" type="Sprite2D" parent="."]
+region_enabled = true
 
 [node name="Patt3" type="Sprite2D" parent="."]
+region_enabled = true
 
 [node name="Patt4" type="Sprite2D" parent="."]
+region_enabled = true
 
 [node name="Patt5" type="Sprite2D" parent="."]
+region_enabled = true

@@ -5,6 +5,8 @@ extends Node2D
 #region Description
 # Display and manage the patterns the player needs to find
 #
+# The number of patterns to find displayed on the screen is governed by pattern_blocks
+# which must be set in the editor inspector.
 #endregion
 
 
@@ -13,6 +15,10 @@ extends Node2D
 # signals
 
 # enums
+#
+# rect2_type						Indecies to the patterns array entry
+
+enum rect2_type {LOCAL_POSITION, GLOBAL_POSITION}
 
 # constants
 
@@ -27,8 +33,12 @@ const PATT_OFFSET = Vector2(0, 40 + 20)
 # public variables
 
 # private variables
-
-var pattern_numbers: Array[int]
+#
+# box						The puzzle image's region_rect
+# pattern_index				Array of the Patt* objects on the screen containing
+#							the index of the pattern in GamePlay's patterns array
+var box: Rect2
+var pattern_index: Array
 
 # onready variables
 
@@ -40,19 +50,6 @@ var pattern_numbers: Array[int]
 
 # Virtual Godot methods
 
-# _ready()
-# Called when node is ready
-#
-# Parameters
-#		None
-# Return
-#		None
-#==
-# Not used, but stub is kept for future versions
-func _ready() -> void:
-	pass
-
-
 
 # Built-in Signal Callbacks
 
@@ -62,20 +59,21 @@ func _ready() -> void:
 
 # Public Methods
 
-# arrange_pattern_boxes(picture, patterns)
+# arrange_pattern_boxes(picture, patterns, available)
 # Position pattern boxes on the screen
 #
 # Parameters
 #	pictures: Sprite2D				Puzzle's picture
-#	patterns: Array[int]			Pattern frames to find
+#	patterns: Array					Pattern frames to find
+#	available: Array[bool]			Patterns still available to find
 # Return
 #	None
 #==
 # Step 1 - Calculate the positions for various images
 # Step 2 - Position the background image
-# Step 3 - Position the patterns and display then corresponding frame
+# Step 3 - Position the patterns and display then corresponding sub-image
 func arrange_pattern_boxes(picture: Sprite2D, 
-						   patterns: Array[int], 
+						   patterns: Array, 
 						   available: Array[bool]) -> void:
 # Step 1
 	var x_center := get_viewport_rect().end.x / 2
@@ -86,42 +84,46 @@ func arrange_pattern_boxes(picture: Sprite2D,
 	background.scale = BG_SCALE
 	background.visible = true
 # Step 3
-	pattern_numbers.clear()
+	pattern_index.clear()
+	box = picture.region_rect
 	
 	for i in pattern_blocks.size():
 		pattern_blocks[i].position.y = y_pos + PATT_OFFSET.y
 		pattern_blocks[i].position.x = cur_x + PATT_OFFSET.x
 		cur_x += Constant.PATTERN_SIZE + 20
 		pattern_blocks[i].texture = picture.texture
-		pattern_blocks[i].hframes = Constant.HFRAME_COUNT / Constant.FRAME_SCALE
-		pattern_blocks[i].vframes = Constant.VFRAME_COUNT / Constant.FRAME_SCALE
-		pattern_blocks[i].frame = patterns[i] / 100 # pow(Constant.FRAME_SCALE, 2)
-		pattern_numbers.append(patterns[i] / 100)
+		pattern_blocks[i].region_rect = patterns[i]
+		pattern_index.append(i)
 		pattern_blocks[i].visible = true
 		available[i] = false
 	
-	print(patterns)
-	print(pattern_numbers)
 	
-	
-# is_current_frame(frame)
-# Test if frame is in our pattern numbers array
+
+# is_a_current_pattern(index)
+# Test if pattern referenced by index is in our pattern numbers array
 #
 # Parameters
-#	frame: int						Frame number to look for
+#	index: int						Pattern number to look for
 # Return
 #	bool							true = Found, false = Not found
 #==
 # What the code is doing (steps)
-func is_current_frame(frame: int) -> bool:
-	if pattern_numbers.find(frame / 100) != -1:
+func is_a_current_pattern(index: int) -> bool:
+	if pattern_index.find(index) != -1:
 		return true
 	else:
 		return false
 
 
-# set_pattern_frame(frame, patterns, avail)
-# Set the frame number for a pattern node
+# display_next_available_pattern(patt_index, patterns, avail)
+# Replace the pattern referenced by patt_index with a new pattern
+#
+# Ok. So what we are doing here is add a new pattern to those displayed
+# in Patterns. We keep an array (pattern_index) that has the index into patterns
+# of the each pattern displayed in Patterns. We look into avail array to see if
+# any patterns are left to display. If not, then just turn off the Patt* 
+# corresponding to the index. Otherwise, set that pattern_index to the index
+# passed in patt_index and change the region_rect to display the new image.
 #
 # Parameters
 #	frame: int						Index of the pattern_block
@@ -131,19 +133,19 @@ func is_current_frame(frame: int) -> bool:
 #	None
 #==
 # Find the next available pattern
-# Get the index for the corresponding frame number
+# Get the index for the corresponding pattern index
 # If frame isn't found, then just turn off that pattern box
 # Otherwise, set the frame for that pattern box
-func set_new_pattern_frame(frame: int, patterns: Array[int], avail: Array[bool]) -> void:
+func display_next_available_pattern(patt_index: int, patterns: Array, avail: Array[bool]) -> void:
 	var p = avail.find(true)
-	var i: int = pattern_numbers.find(frame)	
+	var i: int = pattern_index.find(patt_index)	
 	
 	if p < 0:
 		pattern_blocks[i].visible = false
-		pattern_numbers[i] = -1
+		pattern_index[i] = -1
 	else:
-		pattern_numbers[i] = patterns[p]
-		pattern_blocks[i].frame = patterns[p]
+		pattern_index[i] = p
+		pattern_blocks[i].region_rect = patterns[p]
 		avail[p] = false
 
 

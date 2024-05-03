@@ -1,18 +1,16 @@
 [gd_resource type="Resource" script_class="ImageData" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://resources/image_data.gd" id="1_mk58j"]
+[ext_resource type="Script" path="res://resources/image_data.gd" id="1_myoxp"]
 
 [resource]
-script = ExtResource("1_mk58j")
+script = ExtResource("1_myoxp")
 image_data = {
 "0000": {
 "image": "0000855_dsc.jpg",
-"pattern_list": [6402, 5697, 5241, 1233, 6505],
-"pos_list": [Vector2(1746, 730), Vector2(1898, 675), Vector2(2133, 637), Vector2(1654, 303), Vector2(1575, 743)]
+"pattern_list": [Rect2(356, 469, 100, 100), Rect2(649, 356, 100, 100), Rect2(513, 428, 100, 100), Rect2(777, 410, 100, 100), Rect2(330, 45, 100, 100), Rect2(393, 180, 100, 100), Rect2(177, 291, 100, 100), Rect2(202, 499, 100, 100)]
 },
 "0001": {
 "image": "0000786_dsc.jpg",
-"pattern_list": [7688, 4717, 1024, 3394, 3729],
-"pos_list": [Vector2(1746, 730), Vector2(1898, 675), Vector2(2133, 637), Vector2(1654, 303), Vector2(1575, 743), Vector2(1406, 842), Vector2(1695, 594), Vector2(1961, 283), Vector2(1666, 487), Vector2(1416, 510)]
+"pattern_list": [Rect2(343, 367, 100, 100), Rect2(37, 590, 100, 100), Rect2(179, 651, 100, 100), Rect2(439, 24, 100, 100), Rect2(581, 41, 100, 100), Rect2(800, 20, 100, 100), Rect2(505, 199, 100, 100), Rect2(55, 257, 100, 100)]
 }
 }
