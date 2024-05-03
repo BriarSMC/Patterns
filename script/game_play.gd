@@ -258,10 +258,9 @@ func set_pattern_found(index: int) -> void:
 	var overlay = FOUND_FRAME.instantiate()
 	overlay.pattern_index = index
 # Step 2
-	#overlay.position = patterns[index][rect2_type.LOCAL_POSITION] # rect.position
 	overlay_node.add_child(overlay)
-	overlay.position = patterns[index][0].position + PATTERN_OFFSET_VECTOR
-	overlay.region_rect = patterns[index][rect2_type.LOCAL_POSITION]
+	overlay.position = patterns[index].position + PATTERN_OFFSET_VECTOR
+	overlay.region_rect = patterns[index]
 
 # Step 3
 	pattern_node.display_next_available_pattern(index, patterns, patterns_available)
@@ -304,7 +303,7 @@ func mouse_in_existing_pattern(pos: Vector2) -> int:
 		var rect2: Rect2 = patterns[i][0]
 		rect2.position.x = rect2.position.x + picture_rect.position.x
 		rect2.position.y = rect2.position.y + picture_rect.position.y
-		if rect2.has_point(pos): # patterns[i][rect2_type.LOCAL_POSITION].has_point(pos):
+		if rect2.has_point(pos): 
 			retval = i
 	printt("Pattern clicked: ", retval)
 	

@@ -92,7 +92,7 @@ func arrange_pattern_boxes(picture: Sprite2D,
 		pattern_blocks[i].position.x = cur_x + PATT_OFFSET.x
 		cur_x += Constant.PATTERN_SIZE + 20
 		pattern_blocks[i].texture = picture.texture
-		pattern_blocks[i].region_rect = patterns[i][rect2_type.LOCAL_POSITION]
+		pattern_blocks[i].region_rect = patterns[i]
 		pattern_index.append(i)
 		pattern_blocks[i].visible = true
 		available[i] = false
@@ -145,7 +145,7 @@ func display_next_available_pattern(patt_index: int, patterns: Array, avail: Arr
 		pattern_index[i] = -1
 	else:
 		pattern_index[i] = p
-		pattern_blocks[i].region_rect = patterns[p][rect2_type.GLOBAL_POSITION]
+		pattern_blocks[i].region_rect = patterns[p]
 		avail[p] = false
 
 
