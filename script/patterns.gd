@@ -15,10 +15,6 @@ extends Node2D
 # signals
 
 # enums
-#
-# rect2_type						Indecies to the patterns array entry
-
-enum rect2_type {LOCAL_POSITION, GLOBAL_POSITION}
 
 # constants
 

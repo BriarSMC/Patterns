@@ -39,10 +39,6 @@ signal patterns_remaining_count_is_zero	# find_cound has reached zero
 signal exit_game_requested				# we should exit the game
 
 # enums
-#
-# rect2_type						Indecies to the patterns array entry
-
-enum rect2_type {LOCAL_POSITION, GLOBAL_POSITION}
 
 # constants
 #
@@ -300,7 +296,7 @@ func mouse_in_existing_pattern(pos: Vector2) -> int:
 # Step 2
 	var retval: int = -1
 	for i in patterns.size():
-		var rect2: Rect2 = patterns[i][0]
+		var rect2: Rect2 = patterns[i]
 		rect2.position.x = rect2.position.x + picture_rect.position.x
 		rect2.position.y = rect2.position.y + picture_rect.position.y
 		if rect2.has_point(pos): 
@@ -370,6 +366,7 @@ func next_picture() -> void:
 	var config = Config.get_picture(Config.current_picture)	
 	if config.is_empty():
 		exit_game_requested.emit()
+		return
 	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
 	for obj: Node2D in overlay_node.get_children():
 		obj.queue_free()
