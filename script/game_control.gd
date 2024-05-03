@@ -80,6 +80,7 @@ func _ready() -> void:
 	add_new_player.visible = false
 	add_new_player.add_cancel_button("Cancel")
 	add_new_player.register_text_enter(player_name)
+	select_player_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 
 
 # _input(event)

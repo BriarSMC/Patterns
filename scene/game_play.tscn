@@ -1,10 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://d4fbtaow1kxrv"]
+[gd_scene load_steps=10 format=3 uid="uid://d4fbtaow1kxrv"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_iqxg8"]
 [ext_resource type="Texture2D" uid="uid://biuw7dh7t60h8" path="res://images/frame-928206_1280.png" id="3_lhlhq"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="4_uttja"]
 [ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="5_fnffu"]
+[ext_resource type="Texture2D" uid="uid://cw2llsexe5qc1" path="res://images/UI/green_button04.png" id="6_034tp"]
+[ext_resource type="Texture2D" uid="uid://3wkm045boqsr" path="res://images/UI/yellow_button04.png" id="7_fwugf"]
+[ext_resource type="Texture2D" uid="uid://cilaaqgw03lfd" path="res://images/UI/blue_button04.png" id="8_mcaao"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_eu2qu"]
+font_size = 34
+font_color = Color(0, 0.254902, 0.839216, 1)
+outline_size = 2
+outline_color = Color(0.0666667, 0.0235294, 0.270588, 1)
 
 [node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node")]
 script = ExtResource("1_lf48k")
@@ -71,17 +80,64 @@ offset_bottom = 58.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Next Picture" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
+[node name="Next Picture" type="TextureButton" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
-text = "Next Picture"
+texture_normal = ExtResource("6_034tp")
+texture_pressed = ExtResource("7_fwugf")
+texture_hover = ExtResource("8_mcaao")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/VBoxContainer/Next Picture"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -34.0
+offset_right = 30.0
+offset_bottom = 22.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.0666667, 0.0235294, 0.270588, 1)
+text = "Next
+"
+label_settings = SubResource("LabelSettings_eu2qu")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="VSeparator" type="VSeparator" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
 
-[node name="Quit" type="Button" parent="CanvasLayer/Control/VBoxContainer"]
+[node name="Quit" type="TextureButton" parent="CanvasLayer/Control/VBoxContainer"]
 layout_mode = 2
-text = "Quit"
+texture_normal = ExtResource("6_034tp")
+texture_pressed = ExtResource("7_fwugf")
+texture_hover = ExtResource("8_mcaao")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/VBoxContainer/Quit"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.5
+offset_top = -33.5
+offset_right = 35.5
+offset_bottom = 23.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.0666667, 0.0235294, 0.270588, 1)
+text = "Quit
+"
+label_settings = SubResource("LabelSettings_eu2qu")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="canceled" from="PictureCompletedDialog" to="." method="_on_picture_completed_dialog_canceled"]
 [connection signal="confirmed" from="PictureCompletedDialog" to="." method="_on_picture_completed_dialog_confirmed"]
+[connection signal="pressed" from="CanvasLayer/Control/VBoxContainer/Next Picture" to="." method="_on_next_picture_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/VBoxContainer/Quit" to="." method="_on_quit_pressed"]

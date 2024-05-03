@@ -205,6 +205,12 @@ func _on_picture_completed_dialog_canceled():
 	exit_game_requested.emit()
 
 
+func _on_next_picture_pressed():
+	next_picture()
+
+
+func _on_quit_pressed():
+	exit_game()
 
 # Custom Signal Callbacks
 
@@ -400,3 +406,7 @@ func display_no_more_pictures() -> void:
 	picture_completed_dialog.visible = true
 
 # Subclasses
+
+
+
+
