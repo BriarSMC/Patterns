@@ -77,6 +77,8 @@ var patterns_available: Array[bool]
 var patterns_remaining_count: int
 var time_elapsed: float
 var add_delta_time := false
+var picture_completed_quit_button: Button
+var no_more_pictures := false
 
 # onready variables
 
@@ -132,7 +134,7 @@ func _ready() -> void:
 	# Make sure the frame is behind the picture
 	picture_border_image.z_index = -1
 # Step 6
-	picture_completed_dialog.add_cancel_button("Quit")	
+	picture_completed_quit_button = picture_completed_dialog.add_cancel_button("Quit")	
 	# https://forum.godotengine.org/t/how-to-center-dialog-text-of-a-acceptdialog/16235/5
 	picture_completed_dialog.get_child(1, true).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	picture_completed_dialog.visible = false
@@ -188,9 +190,13 @@ func _input(event: InputEvent) -> void:
 # Built-in Signal Callbacks
 
 # Confirmation from PictureCompletedDialog
-# Go to the next picture
+# If no more pics, then exit
+# Otherwise go to next picture
 func _on_picture_completed_dialog_confirmed():
-	next_picture()
+	if no_more_pictures:
+		exit_game_requested.emit()
+	else:
+		next_picture()
 		
 
 # Exit from PictureCompletedDialog
@@ -203,7 +209,7 @@ func _on_picture_completed_dialog_canceled():
 # Custom Signal Callbacks
 
 # find_count_zero()
-# Signal handler for when they player has found all the patters.
+# Signal handler for when they player has found all the patterns.
 #
 # Parameters
 #	None
@@ -367,12 +373,30 @@ func next_picture() -> void:
 	
 	var config = Config.get_picture(Config.current_picture)	
 	if config.is_empty():
-		exit_game_requested.emit()
+		display_no_more_pictures()
+		#exit_game_requested.emit()
 		return
 	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
 	for obj: Node2D in overlay_node.get_children():
 		obj.queue_free()
 		
 
+
+# display_no_more_pictures()
+# Display the PictureCompletedDialog, but change it to a
+# No-More-Pictures-Left dialog
+#
+# Parameters
+#	param: type						Description
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func display_no_more_pictures() -> void:
+	picture_completed_dialog.remove_button(picture_completed_quit_button)
+	picture_completed_dialog.dialog_text = "You finish all the puzzle pictures."
+	picture_completed_dialog.ok_button_text = "Ok"
+	no_more_pictures = true
+	picture_completed_dialog.visible = true
 
 # Subclasses
