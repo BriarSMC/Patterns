@@ -19,12 +19,11 @@ extends Sprite2D
 
 @export var pattern_node: Patterns
 @export var overlay_node: Node2D
+@export var game_play: Node2D
 
 # public variables
 
 # private variables
-
-var game_play: Node2D
 
 # onready variables
 
@@ -43,7 +42,7 @@ var game_play: Node2D
 #==
 # Load the GamePlay (Parent node) pointer
 func _ready() -> void:
-	game_play = get_parent()
+	pass
 
 
 # Built-in Signal Callbacks

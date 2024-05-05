@@ -81,11 +81,13 @@ centered = false
 
 [node name="PictureArea" type="Area2D" parent="."]
 
-[node name="Picture" type="Sprite2D" parent="PictureArea" node_paths=PackedStringArray("pattern_node")]
+[node name="Picture" type="Sprite2D" parent="PictureArea" node_paths=PackedStringArray("pattern_node", "overlay_node", "game_play")]
 position = Vector2(300, 257)
 centered = false
 script = ExtResource("3_16jgr")
 pattern_node = NodePath("../../Patterns")
+overlay_node = NodePath("Overlays")
+game_play = NodePath("../..")
 
 [node name="BorderImage" type="Sprite2D" parent="PictureArea/Picture"]
 z_index = 1
