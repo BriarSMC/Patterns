@@ -37,6 +37,7 @@ extends Node2D
 
 signal patterns_remaining_count_is_zero	# find_cound has reached zero
 signal exit_game_requested				# we should exit the game
+signal picture_complete_dialog_closed(sw: String)
 
 # enums
 
@@ -56,6 +57,8 @@ const PATTERN_OFFSET_VECTOR := Vector2(Constant.PATTERN_SIZE / 2, Constant.PATTE
 @export var picture_area_vertical_offset := 43 + 50		# Kinda set visually in the 2D editor
 @export var pattern_node: Patterns
 @export var overlay_node: Node2D
+@export var picture_completed_dialog: AcceptDialog
+@export var no_more_pictures_dialog: AcceptDialog
 
 # public variables
 
@@ -86,7 +89,6 @@ var no_more_pictures := false
 @onready var picture := $PictureArea/Picture
 @onready var picture_border_image := $PictureArea/Picture/BorderImage
 @onready var background = $Background
-@onready var picture_completed_dialog = $PictureCompletedDialog
 
 #endregion
 
@@ -111,11 +113,11 @@ var no_more_pictures := false
 # Step 4 - Create Rect2 of the picture
 # 	Used for detecting mouse button clicks on the picture
 # Step 5 - Position the border around the puzzle image
-# Step 6 - Add a QUIT button to the popup used when all patterns have been found
 func _ready() -> void:
 # Step 1
 	exit_game_requested.connect(exit_game)	
 	patterns_remaining_count_is_zero.connect(find_count_zero)
+	picture_complete_dialog_closed.connect(picture_completed)
 # Step 2
 	var vp = get_viewport_rect()	
 	var config = Config.get_picture(Config.current_picture)	
@@ -133,11 +135,6 @@ func _ready() -> void:
 	picture_border_image.position.y = r.position.y + (r.end.y/2)
 	# Make sure the frame is behind the picture
 	picture_border_image.z_index = -1
-# Step 6
-	picture_completed_quit_button = picture_completed_dialog.add_cancel_button("Quit")	
-	# https://forum.godotengine.org/t/how-to-center-dialog-text-of-a-acceptdialog/16235/5
-	picture_completed_dialog.get_child(1, true).horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	picture_completed_dialog.visible = false
 
 # _process(delta)
 # Called once per frame
@@ -189,21 +186,6 @@ func _input(event: InputEvent) -> void:
 
 # Built-in Signal Callbacks
 
-# Confirmation from PictureCompletedDialog
-# If no more pics, then exit
-# Otherwise go to next picture
-func _on_picture_completed_dialog_confirmed():
-	if no_more_pictures:
-		exit_game_requested.emit()
-	else:
-		next_picture()
-		
-
-# Exit from PictureCompletedDialog
-# Request game end
-func _on_picture_completed_dialog_canceled():
-	exit_game_requested.emit()
-
 
 func _on_next_picture_pressed():
 	next_picture()
@@ -227,11 +209,7 @@ func _on_quit_pressed():
 # Display the elapsed time in PictureCompletedDialog popup
 func find_count_zero():
 	add_delta_time = false
-	var hours = time_elapsed / 3600
-	var minutes = time_elapsed / 60
-	var seconds = fmod(time_elapsed, 60)
-	picture_completed_dialog.dialog_text = "You found all patterns in %02d:%02d:%02d" % [hours, minutes, seconds]
-	picture_completed_dialog.show()
+	picture_completed_dialog.next_picture(time_elapsed)
 	
 
 # exit_game()
@@ -245,8 +223,29 @@ func find_count_zero():
 # Just up and quit
 func exit_game() -> void:
 	get_tree().quit()
-	
-	
+
+
+# picture_completed(sw)
+# Confirmation from PictureCompletedDialog
+#
+# Parameters
+#	sw: String						Which button was clicked
+# Return
+#	None
+#==	
+# If no more pics, then exit
+# Otherwise check which button was clicked and act appropriately
+func picture_completed(sw: String):
+	match sw:
+		"next":
+			next_picture()
+			if no_more_pictures:
+				no_more_pictures_dialog.display_no_more_pictures()
+				
+		"quit":
+			exit_game_requested.emit()
+
+
 # Public Methods
 
 
@@ -376,34 +375,15 @@ func next_picture() -> void:
 	Config.current_player_data.current_picture = Config.current_picture
 	Config.player_data.players[Config.current_player] = Config.current_player_data
 	Config.player_data_res.save()
-	
+
 	var config = Config.get_picture(Config.current_picture)	
 	if config.is_empty():
-		display_no_more_pictures()
-		#exit_game_requested.emit()
+		no_more_pictures = true
 		return
 	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
 	for obj: Node2D in overlay_node.get_children():
 		obj.queue_free()
-		
 
-
-# display_no_more_pictures()
-# Display the PictureCompletedDialog, but change it to a
-# No-More-Pictures-Left dialog
-#
-# Parameters
-#	param: type						Description
-# Return
-#	None
-#==
-# What the code is doing (steps)
-func display_no_more_pictures() -> void:
-	picture_completed_dialog.remove_button(picture_completed_quit_button)
-	picture_completed_dialog.dialog_text = "You finish all the puzzle pictures."
-	picture_completed_dialog.ok_button_text = "Ok"
-	no_more_pictures = true
-	picture_completed_dialog.visible = true
 
 # Subclasses
 

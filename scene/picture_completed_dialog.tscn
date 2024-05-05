@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://kc8s7cbj8jtl"]
+
+[ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="1_3x4ww"]
+[ext_resource type="Script" path="res://script/picture_completed_dialog.gd" id="2_wp6s2"]
+
+[node name="PictureCompletedDialog" type="AcceptDialog"]
+title = "Picture Completed"
+initial_position = 2
+size = Vector2i(300, 200)
+visible = true
+always_on_top = true
+theme = ExtResource("1_3x4ww")
+ok_button_text = "Next"
+dialog_text = "You have completed puzzle in 00:00:00"
+dialog_close_on_escape = false
+dialog_autowrap = true
+script = ExtResource("2_wp6s2")
+
+[connection signal="canceled" from="." to="." method="_on_canceled"]
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]

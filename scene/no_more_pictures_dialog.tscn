@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://ceshihaqjb4cx"]
+
+[ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="1_k15hl"]
+[ext_resource type="Script" path="res://script/no_more_pictures_dialog.gd" id="2_bntpy"]
+
+[node name="NoMorePicturesDialog" type="AcceptDialog"]
+title = "Picture Completed"
+initial_position = 2
+size = Vector2i(300, 200)
+visible = true
+always_on_top = true
+theme = ExtResource("1_k15hl")
+dialog_text = "Game Over. There are no more pictures."
+dialog_close_on_escape = false
+dialog_autowrap = true
+script = ExtResource("2_bntpy")
+
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]
