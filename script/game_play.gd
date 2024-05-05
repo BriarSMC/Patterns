@@ -104,6 +104,8 @@ var no_more_pictures := false
 # Return
 #		None
 #==
+# DEBUG: Set current player to "STEVE" if it's blank. Caused by runing GamePlay directly 
+#		 from the editor thus bypassing GameControl (which sets current player)
 # Step 1 - Connect to our signals
 # Step 2 - Place the picture in the play area
 #	Get viewport dimensions
@@ -115,6 +117,9 @@ var no_more_pictures := false
 # 	Used for detecting mouse button clicks on the picture
 # Step 5 - Position the border around the puzzle image
 func _ready() -> void:
+# DEBUG:
+	if Config.current_player.is_empty():
+		Config.current_player = "STEVE"
 # Step 1
 	exit_game_requested.connect(exit_game)	
 	patterns_remaining_count_is_zero.connect(find_count_zero)
