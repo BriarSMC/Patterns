@@ -1,4 +1,4 @@
-class_name GamePlayNew
+class_name GamePlay
 extends Node2D
 
 
@@ -38,6 +38,7 @@ extends Node2D
 signal patterns_remaining_count_is_zero	# find_cound has reached zero
 signal exit_game_requested				# we should exit the game
 signal picture_complete_dialog_closed(sw: String)
+signal reset_picture_requested
 
 # enums
 
@@ -118,11 +119,12 @@ func _ready() -> void:
 	exit_game_requested.connect(exit_game)	
 	patterns_remaining_count_is_zero.connect(find_count_zero)
 	picture_complete_dialog_closed.connect(picture_completed)
+	reset_picture_requested.connect(reset_picture)
 # Step 2
 	var vp = get_viewport_rect()	
 	var config = Config.get_picture(Config.current_picture)	
 # Step 3
-	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
+	patterns_remaining_count = picture.set_up_image(config, picture, patterns, patterns_available)
 	picture.region_rect = Rect2(0, 0, Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT)
 	picture.position.x = vp.end.x / 2.0 - (float(Constant.PICTURE_WIDTH) / 2.0)
 	picture.position.y = picture_area_vertical_offset
@@ -318,44 +320,23 @@ func mouse_in_existing_pattern(pos: Vector2) -> int:
 	
 	return retval
 
-
-# set_up_image(image)
-# Start a new game round
+# reset_picture()
+# Reset for a new picture
+#
+# This is so the script for picture can set GamePlay data and nodes
 #
 # Parameters
-#	config: Dictionary				Data for this image
-#	image: String					The image path
-#	patt: Array						Local array to hold the image's patterns
-#	patt_available: Array			Array indicating what pattern have not been displayed yet
+#	None
 # Return
-#	int								Number of patterns in this image
+#	None
 #==
-# Step 1 - Reset and turn on the timer
-# Step 2 - Load the puzzle's image
-# Step 3 - Make a copy of the patterns array, randomize it, and truncate it
-# Step 4 - Set up the patterns available array as true
-# Step 5 - Display the first N patterns in the pattern area
-# Step 6 - Delete any FoundFrame objects from previous puzzle
-# Step 7 - Return the number of patterns
-func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
-# Step 1
+# What the code is doing (steps)
+func reset_picture() -> void:
 	time_elapsed = 0.0
 	add_delta_time = true
-# Step 2
-	image.texture = load(config.image)
-# Step 3
-	patt.assign(config.pattern_list)
-	patt.shuffle()		
-	patt.resize(Constant.MAX_PATTERNS_TO_FIND)
-# Step 4
-	patt_available.resize(patt.size())
-	patt_available.fill(true)	
-# Step 5
-	pattern_node.arrange_pattern_boxes(image, patt, patt_available)	
-# Step 6
 	delete_found_frames()
-# Step 7
-	return patt.size()
+	
+# 
 
 
 # next_picture()
@@ -381,7 +362,7 @@ func next_picture() -> void:
 	if config.is_empty():
 		no_more_pictures = true
 		return
-	patterns_remaining_count = set_up_image(config, picture, patterns, patterns_available)
+	patterns_remaining_count = picture.set_up_image(config, picture, patterns, patterns_available)
 	for obj: Node2D in overlay_node.get_children():
 		obj.queue_free()
 

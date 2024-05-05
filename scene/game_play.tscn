@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://d4fbtaow1kxrv"]
+[gd_scene load_steps=13 format=3 uid="uid://d4fbtaow1kxrv"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_iqxg8"]
+[ext_resource type="Script" path="res://script/game_play_picture.gd" id="3_16jgr"]
 [ext_resource type="Texture2D" uid="uid://biuw7dh7t60h8" path="res://images/frame-928206_1280.png" id="3_lhlhq"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="4_uttja"]
 [ext_resource type="PackedScene" uid="uid://kc8s7cbj8jtl" path="res://scene/picture_completed_dialog.tscn" id="5_6wl1a"]
@@ -33,9 +34,11 @@ centered = false
 
 [node name="PictureArea" type="Area2D" parent="."]
 
-[node name="Picture" type="Sprite2D" parent="PictureArea"]
+[node name="Picture" type="Sprite2D" parent="PictureArea" node_paths=PackedStringArray("pattern_node")]
 position = Vector2(300, 257)
 centered = false
+script = ExtResource("3_16jgr")
+pattern_node = NodePath("../../Patterns")
 
 [node name="BorderImage" type="Sprite2D" parent="PictureArea/Picture"]
 z_index = 1
