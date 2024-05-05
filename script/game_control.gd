@@ -107,6 +107,7 @@ func _input(event: InputEvent) -> void:
 # Start the fadeout animation 
 # We connect to the animation's finished signal to change to the next scene
 func _on_start_btn_pressed():
+	Music.game_start(false)
 	Sfx.goto_game_play()
 	animation_player.play("fade-out")
 

@@ -22,6 +22,7 @@ config/icon="res://icon.svg"
 Config="*res://autoload/config.tscn"
 Constant="*res://autoload/constant.tscn"
 Sfx="*res://autoload/SFX.tscn"
+Music="*res://autoload/music.tscn"
 
 [display]
 

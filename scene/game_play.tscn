@@ -45,6 +45,20 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(2),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"start_music_requested"],
+"method": &"emit_signal"
+}]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k4eht"]
 _data = {
@@ -52,7 +66,6 @@ _data = {
 }
 
 [node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node", "picture_completed_dialog", "no_more_pictures_dialog")]
-modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_lf48k")
 pattern_node = NodePath("Patterns")
 overlay_node = NodePath("PictureArea/Picture/Overlays")
@@ -84,13 +97,14 @@ texture = ExtResource("3_lhlhq")
 [node name="Patterns" parent="." instance=ExtResource("4_uttja")]
 
 [node name="PictureCompletedDialog" parent="." instance=ExtResource("5_6wl1a")]
+visible = false
 
 [node name="NoMorePicturesDialog" parent="." instance=ExtResource("6_k0mkg")]
+visible = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Control" type="Control" parent="CanvasLayer"]
-modulate = Color(1, 1, 1, 0)
 layout_mode = 3
 anchors_preset = 2
 anchor_top = 1.0

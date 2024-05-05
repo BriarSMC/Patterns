@@ -6,15 +6,6 @@ const RETRO_SUCCESS_MELODY_04___ELECTRIC_PIANO_2 = preload("res://audio/sfx/Retr
 const RETRO_BEEEP_20 = preload("res://audio/sfx/Retro Beeep 20.mp3")
 const _455428__SERGEQUADRADO__NEXT_CHAPTER_PIANO_IDENT_MONO = preload("res://audio/sfx/455428__sergequadrado__next-chapter-piano-ident-mono.mp3")
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 
 func found_pattern() -> void:
 	stream = _351569__ETHRAIEL__BLIP

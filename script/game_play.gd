@@ -39,6 +39,7 @@ signal patterns_remaining_count_is_zero	# find_cound has reached zero
 signal exit_game_requested				# we should exit the game
 signal picture_complete_dialog_closed(sw: String)
 signal reset_picture_requested
+signal start_music_requested
 
 # enums
 
@@ -125,6 +126,7 @@ func _ready() -> void:
 	patterns_remaining_count_is_zero.connect(find_count_zero)
 	picture_complete_dialog_closed.connect(picture_completed)
 	reset_picture_requested.connect(reset_picture)
+	start_music_requested.connect(func(): Music.game_play())
 # Step 2
 	var vp = get_viewport_rect()	
 	Config.current_picture = Config.player_data.players[Config.current_player].current_picture
@@ -143,6 +145,7 @@ func _ready() -> void:
 	picture_border_image.position.y = r.position.y + (r.end.y/2)
 	# Make sure the frame is behind the picture
 	picture_border_image.z_index = -1
+
 
 # _process(delta)
 # Called once per frame
