@@ -332,7 +332,7 @@ func mouse_in_existing_pattern(pos: Vector2) -> int:
 #==
 # Step 1 - Reset and turn on the timer
 # Step 2 - Load the puzzle's image
-# Step 3 - Make a copy of the patterns array and randomize it
+# Step 3 - Make a copy of the patterns array, randomize it, and truncate it
 # Step 4 - Set up the patterns available array as true
 # Step 5 - Display the first N patterns in the pattern area
 # Step 6 - Delete any FoundFrame objects from previous puzzle
@@ -346,6 +346,7 @@ func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
 # Step 3
 	patt.assign(config.pattern_list)
 	patt.shuffle()		
+	patt.resize(Constant.MAX_PATTERNS_TO_FIND)
 # Step 4
 	patt_available.resize(patt.size())
 	patt_available.fill(true)	
