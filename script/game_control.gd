@@ -107,6 +107,7 @@ func _input(event: InputEvent) -> void:
 # Start the fadeout animation 
 # We connect to the animation's finished signal to change to the next scene
 func _on_start_btn_pressed():
+	Sfx.goto_game_play()
 	animation_player.play("fade-out")
 
 # Unceremoniously exit the game
@@ -117,6 +118,7 @@ func _on_quit_btn_pressed():
 # New player button pressed.
 # Display the new player popup
 func _on_new_player_btn_pressed():
+	Sfx.ui_button()
 	add_new_player.visible = true
 	player_name.grab_focus()
 
@@ -124,11 +126,13 @@ func _on_new_player_btn_pressed():
 # Add new player popup confirmed button pressed
 # Add the new player to the player data
 func _on_add_new_player_confirmed():
+	Sfx.ui_button()
 	add_new_player_confirmed()
 
 
 # New player selected from list
 func _on_select_player_btn_item_selected(index):
+	Sfx.ui_button()
 	Config.player_data["last_player"] = select_player_btn.get_item_text(index).to_upper()
 	set_current_player(Config.player_data["last_player"])
 	Config.player_data_res.save()

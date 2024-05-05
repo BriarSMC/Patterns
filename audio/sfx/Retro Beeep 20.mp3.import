@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://gcuo6s01qjs4"
+path="res://.godot/imported/Retro Beeep 20.mp3-01dc820f85b4e6d63cc910f36535dc5f.mp3str"
+
+[deps]
+
+source_file="res://audio/sfx/Retro Beeep 20.mp3"
+dest_files=["res://.godot/imported/Retro Beeep 20.mp3-01dc820f85b4e6d63cc910f36535dc5f.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

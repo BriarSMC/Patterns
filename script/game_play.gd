@@ -196,10 +196,12 @@ func _input(event: InputEvent) -> void:
 
 
 func _on_next_picture_pressed():
+	Sfx.ui_button()
 	next_picture()
 
 
 func _on_quit_pressed():
+	Sfx.ui_button()
 	exit_game()
 
 # Custom Signal Callbacks
