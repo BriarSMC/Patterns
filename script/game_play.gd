@@ -127,6 +127,7 @@ func _ready() -> void:
 	reset_picture_requested.connect(reset_picture)
 # Step 2
 	var vp = get_viewport_rect()	
+	Config.current_picture = Config.player_data.players[Config.current_player].current_picture
 	var config = Config.get_picture(Config.current_picture)	
 # Step 3
 	patterns_remaining_count = picture.set_up_image(config, picture, patterns, patterns_available)
@@ -216,6 +217,7 @@ func _on_quit_pressed():
 # Display the elapsed time in PictureCompletedDialog popup
 func find_count_zero():
 	add_delta_time = false
+	Sfx.found_all_patterns()
 	picture_completed_dialog.next_picture(time_elapsed)
 	
 
@@ -240,13 +242,13 @@ func exit_game() -> void:
 # Return
 #	None
 #==	
-# If no more pics, then exit
-# Otherwise check which button was clicked and act appropriately
+# Check which button was clicked and act appropriately
 func picture_completed(sw: String):
 	match sw:
 		"next":
 			next_picture()
 			if no_more_pictures:
+				Sfx.game_over()
 				no_more_pictures_dialog.display_no_more_pictures()
 				
 		"quit":
@@ -259,7 +261,7 @@ func picture_completed(sw: String):
 # Private Methods
 
 # set_pattern_found(index)
-# Player cliced on one of our pattern frames
+# Player clicked on one of our pattern frames
 #
 # Parameters
 #	index: int					Index of the pattern found
@@ -269,6 +271,7 @@ func picture_completed(sw: String):
 # Step 1 - Create a FoundFrame instance
 # Step 2 - Place it on the screen
 # Step 3 - Display a new pattern in the Patterns node
+# Step 4 - Play a sound
 func set_pattern_found(index: int) -> void:
 # Step 1
 	var overlay = FOUND_FRAME.instantiate()
@@ -277,9 +280,11 @@ func set_pattern_found(index: int) -> void:
 	overlay_node.add_child(overlay)
 	overlay.position = patterns[index].position + PATTERN_OFFSET_VECTOR
 	overlay.region_rect = patterns[index]
-
 # Step 3
 	pattern_node.display_next_available_pattern(index, patterns, patterns_available)
+# Step 4
+	Sfx.found_pattern()
+	
 	
 # delete_found_frames()
 # Remove all the FoundFrame objects from the puzzle image
