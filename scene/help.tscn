@@ -1,0 +1,98 @@
+[gd_scene load_steps=7 format=3 uid="uid://ce8oofw2kur1k"]
+
+[ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="1_f5yv4"]
+[ext_resource type="Script" path="res://script/help.gd" id="1_kf827"]
+[ext_resource type="Texture2D" uid="uid://cw2llsexe5qc1" path="res://images/UI/green_button04.png" id="3_kwltf"]
+[ext_resource type="Texture2D" uid="uid://3wkm045boqsr" path="res://images/UI/yellow_button04.png" id="4_h56ei"]
+[ext_resource type="Texture2D" uid="uid://cilaaqgw03lfd" path="res://images/UI/blue_button04.png" id="5_agaxe"]
+[ext_resource type="LabelSettings" uid="uid://jcrrhasjrhex" path="res://scene/texture_button_label.tres" id="6_mgy8c"]
+
+[node name="Help" type="Node2D"]
+script = ExtResource("1_kf827")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_f5yv4")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+bbcode_enabled = true
+text = "[font_size=40px]How to play Patterns[/font_size]
+[font_size=26px]
+Patterns first displays it spash screen followed by the control screen. The control screen allows you to do the following.[/font_size]
+[font_size=26px]
+[font_size=32px]Add a new player[/font_size]
+
+You click the [b]New Player[/b] button to add a new player to Patterns. Patterns will ask you for a new player  name. Enter the new name. Patterns will display an error message if the new name is aleady in use.
+
+[font_size=32px]Select Player[/font_size]
+
+You select which player is playing the game in the selection box displayed beneath the [b]Add Player[/b] button. Clicking on this button allows you to select which player to use for the game.
+
+[font_size=32px]Start[/font_size]
+
+To start the game press the [b]Start[/b] button. The game will resume from where you left off.
+
+[font_size=32px]Quit[/font_size]
+
+Click this button to exit the game.
+
+[font_size=32px]Help[/font_size]
+
+Click this button to display this screen.
+[font_size=32px]Game Play[/font_size]
+
+Patterns game play area contains the puzzle picture, a list of patterns under the picture, a [b]Next[/b] button, and a [b]Quit[/b] button. The Next button stops play on the current puzzle picture and displays the next puzzle picture. Patterns does not allow you to go back to a puzzle picture you have skipped. The Quit button exits the games.
+
+The goal of the game is to find all the patterns listed beneath the puzzle picture. When you find the pattern in the puzzle picture, then position the mouse cursor over the pattern in the puzzle picture and click it with the left mouse button. If this is a correct pattern, then Patterns will draw a blue box around the pattern in the puzzle picture. When you have found all the patterns, then Patterns will display a popup showing how much time it took you to solve the puzzle and whether you want to continue or quit.
+[/font_size] "
+
+[node name="BackBtn" type="TextureButton" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+texture_normal = ExtResource("3_kwltf")
+texture_pressed = ExtResource("4_h56ei")
+texture_hover = ExtResource("5_agaxe")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/BackBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.0
+offset_top = -33.0
+offset_right = 35.0
+offset_bottom = 23.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "Back"
+label_settings = ExtResource("6_mgy8c")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/Control/BackBtn" to="." method="_on_back_btn_pressed"]

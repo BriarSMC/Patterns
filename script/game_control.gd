@@ -24,6 +24,7 @@ class_name GameControl extends Node2D
 # constants
 
 const GAME_PLAY = preload("res://scene/game_play.tscn")
+const HELP = preload("res://scene/help.tscn")
 
 # exports (The following properties must be set in the Inspector by the designer)
 
@@ -116,6 +117,12 @@ func _on_quit_btn_pressed():
 	get_tree().quit()
 
 
+# Display help screen
+func _on_help_btn_pressed():
+	Sfx.ui_button()
+	get_tree().change_scene_to_packed(HELP)
+
+
 # New player button pressed.
 # Display the new player popup
 func _on_new_player_btn_pressed():
@@ -137,6 +144,7 @@ func _on_select_player_btn_item_selected(index):
 	Config.player_data["last_player"] = select_player_btn.get_item_text(index).to_upper()
 	set_current_player(Config.player_data["last_player"])
 	Config.player_data_res.save()
+	
 	
 # Animation is finished.
 # Change to GamePlay scene if 'fade-out'
