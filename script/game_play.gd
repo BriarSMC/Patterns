@@ -40,6 +40,7 @@ signal exit_game_requested				# we should exit the game
 signal picture_complete_dialog_closed(sw: String)
 signal reset_picture_requested
 signal start_music_requested
+signal left_mouse_click_detected(pos: Vector2)
 
 # enums
 
@@ -127,6 +128,7 @@ func _ready() -> void:
 	picture_complete_dialog_closed.connect(picture_completed)
 	reset_picture_requested.connect(reset_picture)
 	start_music_requested.connect(func(): Music.game_play())
+	left_mouse_click_detected.connect(left_mouse_click)
 # Step 2
 	var vp = get_viewport_rect()	
 	Config.current_picture = Config.player_data.players[Config.current_player].current_picture
@@ -160,40 +162,7 @@ func _process(delta) -> void:
 	if add_delta_time:
 		time_elapsed += delta
 	
-# _input(event)
-# Look for mouse clicks
-#
-# Parameters
-#	event: InputEvent          	Seconds elapsed since last frame
-# Return
-#	None
-#==
-# We listen for two events:
-#
-# Step 1: Cancel - Just exit the game
-# Step 2:  Left mouse button click
-#	Find out if the player clicked on the image and, if so, which frame was clicked
-# Step 3: If image was clicked and only if the pattern is in the list on the screen
-#	Draw a box around the frame
-#	Decrement the patterns found counter
-#	If there are not more patterns to find, then emit the appropriate signal
-func _input(event: InputEvent) -> void:
-# Step 1
-	if event.is_action_pressed("ui_cancel"):
-		get_tree().quit()
-# Step 2		
-	if (event is InputEventMouseButton and 
-		event.button_index == MOUSE_BUTTON_LEFT and 
-		event.pressed): 
-		var patt_ndx := mouse_in_existing_pattern(event.position)
-# Step 3
-		if patt_ndx >= 0 and pattern_node.is_a_current_pattern(patt_ndx):
-			set_pattern_found(patt_ndx)
-			patterns_remaining_count -= 1
-			if patterns_remaining_count == 0:
-				patterns_remaining_count_is_zero.emit()
-				
-
+	
 
 # Built-in Signal Callbacks
 
@@ -208,6 +177,28 @@ func _on_quit_pressed():
 	exit_game()
 
 # Custom Signal Callbacks
+
+# left_mouse_click
+# Look for left mouse clicks
+#
+# Parameters
+#	event: InputEvent          	Seconds elapsed since last frame
+# Return
+#	None
+#==
+# If image was clicked and only if the pattern is in the list on the screen
+#	Draw a box around the frame
+#	Decrement the patterns found counter
+#	If there are not more patterns to find, then emit the appropriate signal
+#
+func left_mouse_click(pos: Vector2) -> void:
+	var patt_ndx := mouse_in_existing_pattern(pos)
+	if patt_ndx >= 0 and pattern_node.is_a_current_pattern(patt_ndx):
+		set_pattern_found(patt_ndx)
+		patterns_remaining_count -= 1
+		if patterns_remaining_count == 0:
+			patterns_remaining_count_is_zero.emit()
+
 
 # find_count_zero()
 # Signal handler for when they player has found all the patterns.

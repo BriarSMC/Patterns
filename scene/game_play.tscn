@@ -1,7 +1,8 @@
-[gd_scene load_steps=15 format=3 uid="uid://d4fbtaow1kxrv"]
+[gd_scene load_steps=16 format=3 uid="uid://d4fbtaow1kxrv"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_iqxg8"]
+[ext_resource type="PackedScene" uid="uid://cnblw4o4kqmqc" path="res://scene/input_handler.tscn" id="2_qgvmu"]
 [ext_resource type="Script" path="res://script/game_play_picture.gd" id="3_16jgr"]
 [ext_resource type="Texture2D" uid="uid://biuw7dh7t60h8" path="res://images/frame-928206_1280.png" id="3_lhlhq"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="4_uttja"]
@@ -71,6 +72,9 @@ pattern_node = NodePath("Patterns")
 overlay_node = NodePath("PictureArea/Picture/Overlays")
 picture_completed_dialog = NodePath("PictureCompletedDialog")
 no_more_pictures_dialog = NodePath("NoMorePicturesDialog")
+
+[node name="InputHandler" parent="." node_paths=PackedStringArray("game_play") instance=ExtResource("2_qgvmu")]
+game_play = NodePath("..")
 
 [node name="Background" type="Sprite2D" parent="."]
 z_index = -2

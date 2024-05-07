@@ -11,6 +11,7 @@ extends Node
 #	o Keeps a global for this data
 #	o Loads the player data from the resource file
 #	o Keeps a global for this data
+#	0 Creates an array of content directories
 #endregion
 
 
@@ -33,6 +34,7 @@ var image_data_res: ImageData 			# Pointer to the image data resource node
 var image_data := {}					# Pointer to the image data 
 var player_data_res: PlayerData			# Pointer to the player data resource node
 var player_data := {}					# Pointer to the player data 
+var content_dirs: PackedStringArray = [] # List of directories in the content directory
 
 # private variables
 
@@ -58,6 +60,8 @@ func _ready() -> void:
 	image_data = image_data_res.image_data
 	player_data_res = PlayerData.load_or_create()
 	player_data = player_data_res.player_data
+	get_content_dirs()
+	print(content_dirs)
 
 
 # Built-in Signal Callbacks
@@ -89,6 +93,23 @@ func get_picture(num: int) -> Dictionary:
 
 # Private Methods
 
+# get_content_dirs()
+# Build array of Content Directories
+#
+# Parameters
+#	None
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func get_content_dirs() -> void:
+	var dir = DirAccess.open(Constant.CONTENT_DIR)
+	if dir:
+		dir.list_dir_begin()
+		var dir_name = dir.get_next()
+		while not dir_name.is_empty():
+			content_dirs.append(dir_name)
+			dir_name = dir.get_next()
 
 # Subclasses
 

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnblw4o4kqmqc"]
+
+[ext_resource type="Script" path="res://script/input_handler.gd" id="1_lmlce"]
+
+[node name="InputHandler" type="Node" node_paths=PackedStringArray("game_play")]
+script = ExtResource("1_lmlce")
+game_play = NodePath("")

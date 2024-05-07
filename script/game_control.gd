@@ -213,7 +213,8 @@ func add_new_player_confirmed() -> void:
 # Step 4
 	else:	
 		Config.player_data["last_player"] = name_key
-		Config.player_data["players"][name_key] = {"name": name_new, "current_picture": 0}
+		Config.player_data["players"][name_key] = {"name": name_new, "current_content": 0, 
+			"current_picture": 0}
 		Config.player_data_res.save()
 		load_players()
 # Step 5
