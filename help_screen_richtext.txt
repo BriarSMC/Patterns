@@ -1,0 +1,29 @@
+[font_size=40px]How to play Patterns[/font_size]
+[font_size=26px]
+Patterns first displays it spash screen followed by the control screen. The control screen allows you to do the following.[/font_size]
+[font_size=26px]
+[font_size=32px]Add a new player[/font_size]
+
+You click the [b]New Player[/b] button to add a new player to Patterns. Patterns will ask you for a new player  name. Enter the new name. Patterns will display an error message if the new name is aleady in use.
+
+[font_size=32px]Select Player[/font_size]
+
+You select which player is playing the game in the selection box displayed beneath the [b]Add Player[/b] button. Clicking on this button allows you to select which player to use for the game.
+
+[font_size=32px]Start[/font_size]
+
+To start the game press the [b]Start[/b] button. The game will resume from where you left off.
+
+[font_size=32px]Quit[/font_size]
+
+Click this button to exit the game.
+
+[font_size=32px]Help[/font_size]
+
+Click this button to display this screen.
+[font_size=32px]Game Play[/font_size]
+
+Patterns game play area contains the puzzle picture, a list of patterns under the picture, a [b]Next[/b] button, and a [b]Quit[/b] button. The Next button stops play on the current puzzle picture and displays the next puzzle picture. Patterns does not allow you to go back to a puzzle picture you have skipped. The Quit button exits the games.
+
+The goal of the game is to find all the patterns listed beneath the puzzle picture. When you find the pattern in the puzzle picture, then position the mouse cursor over the pattern in the puzzle picture and click it with the left mouse button. If this is a correct pattern, then Patterns will draw a blue box around the pattern in the puzzle picture. When you have found all the patterns, then Patterns will display a popup showing how much time it took you to solve the puzzle and whether you want to continue or quit.
+[/font_size] 
