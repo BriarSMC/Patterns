@@ -15,7 +15,6 @@ config/description="Find patterns in a picture"
 config/version="1.1.0"
 run/main_scene="res://scene/splash_screen.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://game_icon.png"
 config/windows_native_icon="res://game_icon.ico"
 
 [autoload]

@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cw2llsexe5qc1" path="res://images/UI/green_button04.png" id="4_54yrf"]
 [ext_resource type="Texture2D" uid="uid://3wkm045boqsr" path="res://images/UI/yellow_button04.png" id="5_hs3ge"]
 [ext_resource type="Texture2D" uid="uid://cilaaqgw03lfd" path="res://images/UI/blue_button04.png" id="6_m40mw"]
-[ext_resource type="LabelSettings" uid="uid://jcrrhasjrhex" path="res://scene/texture_button_label.tres" id="7_qeu7b"]
+[ext_resource type="LabelSettings" uid="uid://jcrrhasjrhex" path="res://themes/texture_button_label.tres" id="7_qeu7b"]
 
 [sub_resource type="Animation" id="Animation_ei5h1"]
 resource_name = "fade-in"

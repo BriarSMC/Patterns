@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bqrhfyh7455wt"
-path="res://.godot/imported/Retro PickUp 10.wav-3863a71dd66b82bf8502bd53b7dc9c4e.sample"
+path="res://.godot/imported/Retro PickUp 10.wav-07e12c065e075576ffe5a39a76392bf8.sample"
 
 [deps]
 
-source_file="res://scene/Retro PickUp 10.wav"
-dest_files=["res://.godot/imported/Retro PickUp 10.wav-3863a71dd66b82bf8502bd53b7dc9c4e.sample"]
+source_file="res://audio/Retro PickUp 10.wav"
+dest_files=["res://.godot/imported/Retro PickUp 10.wav-07e12c065e075576ffe5a39a76392bf8.sample"]
 
 [params]
 
