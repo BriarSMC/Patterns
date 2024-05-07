@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bgsdmf6u2fc5c"]
+[gd_scene load_steps=11 format=3 uid="uid://ba0s4mbvqfqe4"]
 
 [ext_resource type="Script" path="res://script/game_control.gd" id="1_22epy"]
 [ext_resource type="Texture2D" uid="uid://bmvdfwxhsvky4" path="res://images/beautiful woman 94fad4b7-bd1e-41a0-8c69-6283748b6e00.jpg" id="1_fqjkt"]
