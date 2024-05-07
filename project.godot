@@ -12,10 +12,11 @@ config_version=5
 
 config/name="Patterns"
 config/description="Find patterns in a picture"
-config/version="1.0.2"
+config/version="1.1.0"
 run/main_scene="res://scene/splash_screen.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://game_icon.png"
+config/windows_native_icon="res://game_icon.ico"
 
 [autoload]
 
@@ -28,7 +29,8 @@ Music="*res://autoload/music.tscn"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/initial_position_type=2
+window/size/mode=3
+window/size/resizable=false
 window/subwindows/embed_subwindows=false
 
 [input]
