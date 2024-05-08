@@ -23,6 +23,7 @@ Config="*res://autoload/config.tscn"
 Constant="*res://autoload/constant.tscn"
 Sfx="*res://autoload/SFX.tscn"
 Music="*res://autoload/music.tscn"
+SceneControl="*res://autoload/scene_control.tscn"
 
 [display]
 
@@ -31,11 +32,3 @@ window/size/viewport_height=1080
 window/size/mode=2
 window/size/resizable=false
 window/subwindows/embed_subwindows=false
-
-[input]
-
-clear-player-data={
-"deadzone": 0.5,
-"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":true,"shift_pressed":false,"ctrl_pressed":true,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":69,"key_label":0,"unicode":101,"echo":false,"script":null)
-]
-}

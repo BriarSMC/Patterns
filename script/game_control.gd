@@ -23,9 +23,6 @@ class_name GameControl extends Node2D
 
 # constants
 
-const GAME_PLAY = preload("res://scene/game_play.tscn")
-const HELP = preload("res://scene/help.tscn")
-
 # exports (The following properties must be set in the Inspector by the designer)
 
 # public variables
@@ -64,6 +61,7 @@ const HELP = preload("res://scene/help.tscn")
 # 	Otherwise, load the players into the  option button
 # Step 2
 # 	Set up the add player popup window
+# 	Load scenes we change to
 func _ready() -> void:
 # Step 1
 	if Config.player_data.size() == 0:
@@ -82,26 +80,10 @@ func _ready() -> void:
 	add_new_player.add_cancel_button("Cancel")
 	add_new_player.register_text_enter(player_name)
 	select_player_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
+# Step 3
+	SceneControl.load_scene(SceneControl.HELP)
+	SceneControl.load_scene(SceneControl.GAME_PLAY)
 
-
-# _input(event)
-# Called when input is available
-#
-# Parameters
-#	event: InputEvent          	What input happened
-# Return
-#	None
-#==
-# This is for debugging and development purposes.
-# Disable this for production releases.
-#
-# Clear the player data on disk.
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("clear-player-data"):
-		print("Clear Player Data")
-		Config.player_data.clear()
-		Config.player_data_res.save()
-		load_players()
 
 # Built-in Signal Callbacks
 
@@ -120,7 +102,8 @@ func _on_quit_btn_pressed():
 # Display help screen
 func _on_help_btn_pressed():
 	Sfx.ui_button()
-	get_tree().change_scene_to_packed(HELP)
+	SceneControl.change_scene(SceneControl.HELP, self)
+	
 
 
 # New player button pressed.
@@ -150,7 +133,7 @@ func _on_select_player_btn_item_selected(index):
 # Change to GamePlay scene if 'fade-out'
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == 'fade-out':
-		get_tree().change_scene_to_packed(GAME_PLAY)
+		SceneControl.change_scene(SceneControl.GAME_PLAY, self)
 
 # Custom Signal Callbacks
 
@@ -213,7 +196,7 @@ func add_new_player_confirmed() -> void:
 # Step 4
 	else:	
 		Config.player_data["last_player"] = name_key
-		Config.player_data["players"][name_key] = {"name": name_new, "current_content": 0, 
+		Config.player_data["players"][name_key] = {"name": name_new, "current_dir": 0, 
 			"current_picture": 0}
 		Config.player_data_res.save()
 		load_players()

@@ -28,6 +28,7 @@ extends Node
 # public variables
 
 var current_picture := 0				# Current picture to solve
+var current_dir := 0					# Current content directory
 var current_player_data := {}			# Current player data
 var current_player: String
 var image_data_res: ImageData 			# Pointer to the image data resource node
@@ -85,8 +86,9 @@ func _ready() -> void:
 # Otherwise, return an empty dictionary
 func get_picture(num: int) -> Dictionary:
 	var key = ("%04d" % num)
+	var dir = ("%03d/") % current_dir
 	if Config.image_data.has(key):
-		return {"image": Constant.PICTURE_DIR + Config.image_data[key].image, "pattern_list": Config.image_data[key].pattern_list}
+		return {"image": Constant.CONTENT_DIR + dir + Config.image_data[key].image, "pattern_list": Config.image_data[key].pattern_list}
 	else:
 		return {}
 		

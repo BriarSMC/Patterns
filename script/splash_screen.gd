@@ -1,4 +1,4 @@
-class_name GameStart
+class_name SplashScreen
 extends Node2D
 
 
@@ -16,8 +16,6 @@ extends Node2D
 # enums
 
 # constants
-
-const GAME_CONTROL = preload("res://scene/game_control.tscn")
 
 # exports (The following properties must be set in the Inspector by the designer)
 
@@ -46,7 +44,7 @@ const GAME_CONTROL = preload("res://scene/game_control.tscn")
 func _ready() -> void:
 	Music.game_start()
 	animation_player.play("fade-in")
-	pass
+	SceneControl.load_scene(SceneControl.GAME_CONTROL)
 
 
 
@@ -54,7 +52,7 @@ func _ready() -> void:
 
 
 func _on_animation_player_animation_finished(_anim_name):
-	get_tree().change_scene_to_packed(GAME_CONTROL)
+	SceneControl.change_scene(SceneControl.GAME_CONTROL, self)
 
 
 # Custom Signal Callbacks

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1e1864cewhou"]
+
+[ext_resource type="Script" path="res://autoload/scene_control.gd" id="1_gdbax"]
+
+[node name="SceneControl" type="Node"]
+script = ExtResource("1_gdbax")

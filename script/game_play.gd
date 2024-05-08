@@ -132,6 +132,7 @@ func _ready() -> void:
 # Step 2
 	var vp = get_viewport_rect()	
 	Config.current_picture = Config.player_data.players[Config.current_player].current_picture
+	Config.current_dir = Config.player_data.players[Config.current_player].current_dir
 	var config = Config.get_picture(Config.current_picture)	
 # Step 3
 	patterns_remaining_count = picture.set_up_image(config, picture, patterns, patterns_available)
@@ -361,6 +362,7 @@ func reset_picture() -> void:
 func next_picture() -> void:
 	Config.current_picture += 1
 	Config.current_player_data.current_picture = Config.current_picture
+	Config.current_player_data.current_dir = Config.current_dir
 	Config.player_data.players[Config.current_player] = Config.current_player_data
 	Config.player_data_res.save()
 

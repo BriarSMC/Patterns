@@ -29,6 +29,5 @@ func _input(event: InputEvent) -> void:
 	if (event is InputEventMouseButton and 
 		event.button_index == MOUSE_BUTTON_LEFT and 
 		event.pressed): 
-		print("Left mouse at: ", event.position)
 		game_play.emit_signal("left_mouse_click_detected", event.position)
 
