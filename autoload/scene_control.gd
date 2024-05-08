@@ -1,3 +1,4 @@
+class_name SceneControl
 extends Node
 
 
@@ -23,13 +24,9 @@ extends Node
 
 # enums
 
-# constants
+enum scene {GAME_CONTROL, HELP, GAME_PLAY}
 
-# Scene Index Constants
-# Easier to reference than an enum
-const GAME_CONTROL := 0
-const HELP := 1
-const GAME_PLAY := 2
+# constants
 
 # Scene paths
 const GAME_CONTROL_SCENE := "res://scene/game_control.tscn"
@@ -69,7 +66,7 @@ const SCENES := [GAME_CONTROL_SCENE, HELP_SCENE, GAME_PLAY_SCENE]
 #	None
 #==
 # Load resource path indicated by s
-static func load_scene(s: int) -> void:
+func load_scene(s: int) -> void:
 	ResourceLoader.load_threaded_request(SCENES[s])
 	
 
@@ -84,7 +81,7 @@ static func load_scene(s: int) -> void:
 #==
 # Fetch the scene loaded by load_scene()
 # Change to it
-static func change_scene(s: int, n: Node) -> void:
+func change_scene(s: int, n: Node) -> void:
 	var new_scene = ResourceLoader.load_threaded_get(SCENES[s])
 	n.get_tree().change_scene_to_packed(new_scene)
 	

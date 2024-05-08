@@ -26,7 +26,7 @@ extends Node2D
 # onready variables
 
 @onready var animation_player = $AnimationPlayer
-
+@onready var scene_control: SceneControl = $SceneControl
 #endregion
 
 
@@ -44,7 +44,7 @@ extends Node2D
 func _ready() -> void:
 	Music.game_start()
 	animation_player.play("fade-in")
-	SceneControl.load_scene(SceneControl.GAME_CONTROL)
+	scene_control.load_scene(scene_control.scene.GAME_CONTROL)
 
 
 
@@ -52,7 +52,7 @@ func _ready() -> void:
 
 
 func _on_animation_player_animation_finished(_anim_name):
-	SceneControl.change_scene(SceneControl.GAME_CONTROL, self)
+	scene_control.change_scene(scene_control.scene.GAME_CONTROL, self)
 
 
 # Custom Signal Callbacks

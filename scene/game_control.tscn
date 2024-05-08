@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://ba0s4mbvqfqe4"]
+[gd_scene load_steps=12 format=3 uid="uid://ba0s4mbvqfqe4"]
 
 [ext_resource type="Script" path="res://script/game_control.gd" id="1_22epy"]
 [ext_resource type="Texture2D" uid="uid://bmvdfwxhsvky4" path="res://images/beautiful woman 94fad4b7-bd1e-41a0-8c69-6283748b6e00.jpg" id="1_fqjkt"]
+[ext_resource type="PackedScene" uid="uid://d1e1864cewhou" path="res://autoload/scene_control.tscn" id="2_3h2v0"]
 [ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="2_pvf6k"]
 [ext_resource type="Texture2D" uid="uid://cw2llsexe5qc1" path="res://images/UI/green_button04.png" id="4_54yrf"]
 [ext_resource type="Texture2D" uid="uid://3wkm045boqsr" path="res://images/UI/yellow_button04.png" id="5_hs3ge"]
@@ -48,6 +49,8 @@ _data = {
 [node name="GameControl" type="Node2D"]
 modulate = Color(1, 1, 1, 0.4)
 script = ExtResource("1_22epy")
+
+[node name="SceneControl" parent="." instance=ExtResource("2_3h2v0")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

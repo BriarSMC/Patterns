@@ -23,7 +23,6 @@ Config="*res://autoload/config.tscn"
 Constant="*res://autoload/constant.tscn"
 Sfx="*res://autoload/SFX.tscn"
 Music="*res://autoload/music.tscn"
-SceneControl="*res://autoload/scene_control.tscn"
 
 [display]
 

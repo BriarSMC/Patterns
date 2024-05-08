@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://d4fbtaow1kxrv"]
+[gd_scene load_steps=17 format=3 uid="uid://d4fbtaow1kxrv"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
+[ext_resource type="PackedScene" uid="uid://d1e1864cewhou" path="res://autoload/scene_control.tscn" id="2_f4nnt"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_iqxg8"]
 [ext_resource type="PackedScene" uid="uid://cnblw4o4kqmqc" path="res://scene/input_handler.tscn" id="2_qgvmu"]
 [ext_resource type="Script" path="res://script/game_play_picture.gd" id="3_16jgr"]
@@ -72,6 +73,8 @@ pattern_node = NodePath("Patterns")
 overlay_node = NodePath("PictureArea/Picture/Overlays")
 picture_completed_dialog = NodePath("PictureCompletedDialog")
 no_more_pictures_dialog = NodePath("NoMorePicturesDialog")
+
+[node name="SceneControl" parent="." instance=ExtResource("2_f4nnt")]
 
 [node name="InputHandler" parent="." node_paths=PackedStringArray("game_play") instance=ExtResource("2_qgvmu")]
 game_play = NodePath("..")

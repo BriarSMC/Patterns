@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cdg1uganw7jjo"]
+[gd_scene load_steps=8 format=3 uid="uid://cdg1uganw7jjo"]
 
 [ext_resource type="Script" path="res://script/splash_screen.gd" id="1_eqgd8"]
+[ext_resource type="PackedScene" uid="uid://d1e1864cewhou" path="res://autoload/scene_control.tscn" id="2_mmpdf"]
 [ext_resource type="Texture2D" uid="uid://b1dpolmt0eoro" path="res://images/beautiful woman be398243-5682-435b-9831-74d4aaa16294.jpg" id="2_varbq"]
 [ext_resource type="Texture2D" uid="uid://csbxski2bdfjq" path="res://images/patterns-splash-1.png" id="3_nw3tf"]
 [ext_resource type="Texture2D" uid="uid://c3r5ec7e7vggm" path="res://images/patterns-splash-2.png" id="4_lsmmm"]
@@ -65,6 +66,8 @@ _data = {
 [node name="SplashScreen" type="Node2D"]
 modulate = Color(1, 1, 1, 0)
 script = ExtResource("1_eqgd8")
+
+[node name="SceneControl" parent="." instance=ExtResource("2_mmpdf")]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

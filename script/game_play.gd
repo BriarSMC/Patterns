@@ -92,7 +92,7 @@ var no_more_pictures := false
 @onready var picture := $PictureArea/Picture
 @onready var picture_border_image := $PictureArea/Picture/BorderImage
 @onready var background = $Background
-
+@onready var scene_control: SceneControl = $SceneControl
 #endregion
 
 

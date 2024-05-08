@@ -38,7 +38,7 @@ class_name GameControl extends Node2D
 @onready var error_message = $CanvasLayer/Control/PlayerSelection/ErrorMessage
 @onready var message = $CanvasLayer/Control/PlayerSelection/ErrorMessage/Message
 @onready var animation_player = $AnimationPlayer
-
+@onready var scene_control: SceneControl = $SceneControl
 #endregion
 
 
@@ -81,8 +81,8 @@ func _ready() -> void:
 	add_new_player.register_text_enter(player_name)
 	select_player_btn.alignment = HORIZONTAL_ALIGNMENT_CENTER
 # Step 3
-	SceneControl.load_scene(SceneControl.HELP)
-	SceneControl.load_scene(SceneControl.GAME_PLAY)
+	scene_control.load_scene(scene_control.scene.HELP)
+	scene_control.load_scene(scene_control.scene.GAME_PLAY)
 
 
 # Built-in Signal Callbacks
@@ -102,7 +102,7 @@ func _on_quit_btn_pressed():
 # Display help screen
 func _on_help_btn_pressed():
 	Sfx.ui_button()
-	SceneControl.change_scene(SceneControl.HELP, self)
+	scene_control.change_scene(scene_control.scene.HELP, self)
 	
 
 
@@ -133,7 +133,7 @@ func _on_select_player_btn_item_selected(index):
 # Change to GamePlay scene if 'fade-out'
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == 'fade-out':
-		SceneControl.change_scene(SceneControl.GAME_PLAY, self)
+		scene_control.change_scene(scene_control.scene.GAME_PLAY, self)
 
 # Custom Signal Callbacks
 
