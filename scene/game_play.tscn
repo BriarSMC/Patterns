@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://d4fbtaow1kxrv"]
+[gd_scene load_steps=18 format=3 uid="uid://d4fbtaow1kxrv"]
 
 [ext_resource type="Script" path="res://script/game_play.gd" id="1_lf48k"]
-[ext_resource type="PackedScene" uid="uid://d1e1864cewhou" path="res://autoload/scene_control.tscn" id="2_f4nnt"]
+[ext_resource type="PackedScene" uid="uid://d1e1864cewhou" path="res://scene/scene_control.tscn" id="2_f4nnt"]
 [ext_resource type="Texture2D" uid="uid://dhfnf1mn3oa5j" path="res://images/background1.jpg" id="2_iqxg8"]
 [ext_resource type="PackedScene" uid="uid://cnblw4o4kqmqc" path="res://scene/input_handler.tscn" id="2_qgvmu"]
 [ext_resource type="Script" path="res://script/game_play_picture.gd" id="3_16jgr"]
+[ext_resource type="PackedScene" uid="uid://dtcpp03jrodda" path="res://scene/content.tscn" id="3_57d0y"]
 [ext_resource type="Texture2D" uid="uid://biuw7dh7t60h8" path="res://images/frame-928206_1280.png" id="3_lhlhq"]
 [ext_resource type="PackedScene" uid="uid://dwsm1t2ir3sft" path="res://scene/patterns.tscn" id="4_uttja"]
 [ext_resource type="PackedScene" uid="uid://kc8s7cbj8jtl" path="res://scene/picture_completed_dialog.tscn" id="5_6wl1a"]
@@ -67,14 +68,17 @@ _data = {
 "fade-in": SubResource("Animation_hto44")
 }
 
-[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node", "picture_completed_dialog", "no_more_pictures_dialog")]
+[node name="GamePlay" type="Node2D" node_paths=PackedStringArray("pattern_node", "overlay_node", "picture_completed_dialog", "no_more_pictures_dialog", "content")]
 script = ExtResource("1_lf48k")
 pattern_node = NodePath("Patterns")
 overlay_node = NodePath("PictureArea/Picture/Overlays")
 picture_completed_dialog = NodePath("PictureCompletedDialog")
 no_more_pictures_dialog = NodePath("NoMorePicturesDialog")
+content = NodePath("Content")
 
 [node name="SceneControl" parent="." instance=ExtResource("2_f4nnt")]
+
+[node name="Content" parent="." instance=ExtResource("3_57d0y")]
 
 [node name="InputHandler" parent="." node_paths=PackedStringArray("game_play") instance=ExtResource("2_qgvmu")]
 game_play = NodePath("..")

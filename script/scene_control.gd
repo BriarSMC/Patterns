@@ -15,6 +15,9 @@ extends Node
 #
 #	1) In _ready(): Call SceneControl.load_scene() with the scene index constant
 #	2) Call SceneControl.change_scene() with the scene index constant and a ref to self
+#
+# So every scene that changes to other scenes must instantiate this node as a child, either
+# in the editor (preferred) or in a script.
 #endregion
 
 

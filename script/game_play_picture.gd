@@ -70,13 +70,13 @@ func _ready() -> void:
 # Step 4 - Set up the patterns available array as true
 # Step 5 - Display the first N patterns in the pattern area
 # Step 6 - Return the number of patterns
-func set_up_image(config, image, patt: Array, patt_available: Array) -> int:
+func set_up_image(image_data, image, patt: Array, patt_available: Array) -> int: # TODO: Remove image and use self references
 # Step 1
 	game_play.emit_signal("reset_picture_requested")
 # Step 2
-	image.texture = load(config.image)
+	image.texture = load(image_data.image)
 # Step 3
-	patt.assign(config.pattern_list)
+	patt.assign(image_data.pattern_list)
 	patt.shuffle()		
 	patt.resize(Constant.MAX_PATTERNS_TO_FIND)
 # Step 4

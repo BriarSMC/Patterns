@@ -62,6 +62,7 @@ const PATTERN_OFFSET_VECTOR := Vector2(Constant.PATTERN_SIZE / 2, Constant.PATTE
 @export var overlay_node: Node2D
 @export var picture_completed_dialog: AcceptDialog
 @export var no_more_pictures_dialog: AcceptDialog
+@export var content: Content
 
 # public variables
 
@@ -111,13 +112,13 @@ var no_more_pictures := false
 # Step 1 - Connect to our signals
 # Step 2 - Place the picture in the play area
 #	Get viewport dimensions
-#	Get config image data for current picture
 # Step 3 - Set up the image
 #	Get the first puzzle image and set how many patterns it contains
 #	Position the image on the screen
 # Step 4 - Create Rect2 of the picture
 # 	Used for detecting mouse button clicks on the picture
 # Step 5 - Position the border around the puzzle image
+# Step 6 - Find content
 func _ready() -> void:
 # DEBUG:
 	if Config.current_player.is_empty():
@@ -130,12 +131,18 @@ func _ready() -> void:
 	start_music_requested.connect(func(): Music.game_play())
 	left_mouse_click_detected.connect(left_mouse_click)
 # Step 2
-	var vp = get_viewport_rect()	
+	content.get_content_dirs()
+	var ret = content.load_image_config(Config.current_dir)
+	if not ret:
+		print("Load Image Config Failed")
+		exit_game_requested.emit()
+		return
 	Config.current_picture = Config.player_data.players[Config.current_player].current_picture
 	Config.current_dir = Config.player_data.players[Config.current_player].current_dir
-	var config = Config.get_picture(Config.current_picture)	
+	var image_data = content.get_picture(Config.current_dir, Config.current_picture)	
 # Step 3
-	patterns_remaining_count = picture.set_up_image(config, picture, patterns, patterns_available)
+	var vp = get_viewport_rect()	
+	patterns_remaining_count = picture.set_up_image(image_data, picture, patterns, patterns_available)
 	picture.region_rect = Rect2(0, 0, Constant.PICTURE_WIDTH, Constant.PICTURE_HEIGHT)
 	picture.position.x = vp.end.x / 2.0 - (float(Constant.PICTURE_WIDTH) / 2.0)
 	picture.position.y = picture_area_vertical_offset
@@ -148,6 +155,7 @@ func _ready() -> void:
 	picture_border_image.position.y = r.position.y + (r.end.y/2)
 	# Make sure the frame is behind the picture
 	picture_border_image.z_index = -1
+# Step 6
 
 
 # _process(delta)
@@ -323,7 +331,6 @@ func mouse_in_existing_pattern(pos: Vector2) -> int:
 		rect2.position.y = rect2.position.y + picture_rect.position.y
 		if rect2.has_point(pos): 
 			retval = i
-	printt("Pattern clicked: ", retval)
 	
 	return retval
 
@@ -366,7 +373,7 @@ func next_picture() -> void:
 	Config.player_data.players[Config.current_player] = Config.current_player_data
 	Config.player_data_res.save()
 
-	var config = Config.get_picture(Config.current_picture)	
+	var config = content.get_picture(Config.current_dir, Config.current_picture)	
 	if config.is_empty():
 		no_more_pictures = true
 		return

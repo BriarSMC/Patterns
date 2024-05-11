@@ -18,7 +18,7 @@ class_name ImageData extends Resource
 
 # constants
 
-const resource_file_name := "res://data/image_data.tres"
+const resource_file_name := "image_data.tres"
 
 # exports (The following properties must be set in the Inspector by the designer)
 
@@ -53,23 +53,25 @@ const resource_file_name := "res://data/image_data.tres"
 # Return
 #	None
 #==
-func save() -> void:
-	ResourceSaver.save(self, resource_file_name)
+#func save() -> void:
+	#ResourceSaver.save(self, resource_file_name)
 	
 
 
-# load_or_create()
-# Load existing resource file or create a new one
-#
+# load_or_create(ndx)
+# Load specified resource file 
+# Error if doesn't exist
 # Parameters
-#	None
+#	ndx: int					Index of the image config to load
 # Return
 #	None
 #==
-static func load_or_create() -> ImageData:
-	var res:  ImageData = load(resource_file_name) as ImageData
+static func load_or_create(dir: String) -> ImageData:
+	var res:  ImageData = load(dir + resource_file_name) as ImageData
 	if not res:
-		res = ImageData.new()
+		push_error("ImageData.load_or_create invalid parameter ndx: ", dir)
+		assert(false, "ImageData.load_or_create invalid parameter ndx: " + dir)
+		return null
 	return res
 	
 
