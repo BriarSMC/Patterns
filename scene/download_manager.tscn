@@ -1,0 +1,107 @@
+[gd_scene load_steps=9 format=3 uid="uid://cmysiyww8ginr"]
+
+[ext_resource type="Script" path="res://script/download_manager.gd" id="1_3axb2"]
+[ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="2_vjdcy"]
+[ext_resource type="PackedScene" uid="uid://dtcpp03jrodda" path="res://scene/content.tscn" id="3_05ig6"]
+[ext_resource type="PackedScene" uid="uid://blssvf5cqchjw" path="res://scene/zip_manager.tscn" id="4_7olhs"]
+[ext_resource type="PackedScene" uid="uid://ct14e6inbu0xd" path="res://scene/http_manager.tscn" id="5_damjk"]
+[ext_resource type="PackedScene" uid="uid://d0yy4jawhpyny" path="res://scene/loading_spinner.tscn" id="6_sg1c8"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_voicq"]
+font_size = 32
+font_color = Color(0.0764519, 0.0850188, 0.644825, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_y26cr"]
+font_size = 48
+font_color = Color(0.0764519, 0.0850188, 0.644825, 1)
+
+[node name="DownloadManager" type="CanvasLayer"]
+script = ExtResource("1_3axb2")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.736631, 0.898268, 0.84759, 1)
+
+[node name="CurrenbDownloads" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.02
+anchor_top = 0.15
+anchor_right = 0.25
+anchor_bottom = 0.742
+theme = ExtResource("2_vjdcy")
+
+[node name="Label" type="Label" parent="CurrenbDownloads"]
+layout_mode = 2
+text = "Current Downloaded Content"
+label_settings = SubResource("LabelSettings_voicq")
+
+[node name="MarginContainer" type="MarginContainer" parent="CurrenbDownloads"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+
+[node name="CurrentDownloadLabel" type="Label" parent="CurrenbDownloads/MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "None"
+label_settings = SubResource("LabelSettings_voicq")
+
+[node name="AvailableDownloads" type="VBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.15
+anchor_right = 0.98
+anchor_bottom = 0.742
+theme = ExtResource("2_vjdcy")
+
+[node name="Label" type="Label" parent="AvailableDownloads"]
+layout_mode = 2
+text = "Available For Download"
+label_settings = SubResource("LabelSettings_voicq")
+
+[node name="MarginContainer" type="MarginContainer" parent="AvailableDownloads"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+
+[node name="CurrentDownloadLabel" type="Label" parent="AvailableDownloads/MarginContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text = "None"
+label_settings = SubResource("LabelSettings_voicq")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+theme = ExtResource("2_vjdcy")
+
+[node name="Label" type="Label" parent="Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -217.5
+offset_right = 217.5
+offset_bottom = 76.0
+grow_horizontal = 2
+text = "Download Manager"
+label_settings = SubResource("LabelSettings_y26cr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Content" parent="." instance=ExtResource("3_05ig6")]
+
+[node name="ZIPManager" parent="." instance=ExtResource("4_7olhs")]
+
+[node name="HTTPManager" parent="." instance=ExtResource("5_damjk")]
+
+[node name="LoadingSpinner" parent="." instance=ExtResource("6_sg1c8")]

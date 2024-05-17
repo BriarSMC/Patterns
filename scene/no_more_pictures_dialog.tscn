@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://ceshihaqjb4cx"]
+[gd_scene load_steps=5 format=3 uid="uid://ceshihaqjb4cx"]
 
 [ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="1_k15hl"]
 [ext_resource type="Script" path="res://script/no_more_pictures_dialog.gd" id="2_bntpy"]
+[ext_resource type="PackedScene" uid="uid://d0yy4jawhpyny" path="res://scene/loading_spinner.tscn" id="3_bpbsf"]
+[ext_resource type="PackedScene" uid="uid://ct14e6inbu0xd" path="res://scene/http_manager.tscn" id="4_8nkuj"]
 
 [node name="NoMorePicturesDialog" type="AcceptDialog"]
 title = "Picture Completed"
@@ -15,4 +17,16 @@ dialog_close_on_escape = false
 dialog_autowrap = true
 script = ExtResource("2_bntpy")
 
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="LoadingSpinner" parent="CanvasLayer" instance=ExtResource("3_bpbsf")]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer"]
+visible = false
+offset_right = 300.0
+offset_bottom = 136.0
+
+[node name="HTTPManager" parent="." instance=ExtResource("4_8nkuj")]
+
+[connection signal="canceled" from="." to="." method="_on_canceled"]
 [connection signal="confirmed" from="." to="." method="_on_confirmed"]

@@ -41,6 +41,7 @@ signal picture_complete_dialog_closed(sw: String)
 signal reset_picture_requested
 signal start_music_requested
 signal left_mouse_click_detected(pos: Vector2)
+signal download_manager_requested 
 
 # enums
 
@@ -109,7 +110,7 @@ var no_more_pictures := false
 #==
 # DEBUG: Set current player to "STEVE" if it's blank. Caused by runing GamePlay directly 
 #		 from the editor thus bypassing GameControl (which sets current player)
-# Step 1 - Connect to our signals
+# Step 1 - Connect to our signals and async load scenes
 # Step 2 - Place the picture in the play area
 #	Get viewport dimensions
 # Step 3 - Set up the image
@@ -130,8 +131,10 @@ func _ready() -> void:
 	reset_picture_requested.connect(reset_picture)
 	start_music_requested.connect(func(): Music.game_play())
 	left_mouse_click_detected.connect(left_mouse_click)
+	download_manager_requested.connect(func(): scene_control.change_scene(SceneControl.scene.DOWNLOAD_MANAGER, self))
+	scene_control.load_scene(SceneControl.scene.DOWNLOAD_MANAGER)
 # Step 2
-	content.get_content_dirs()
+	content.load_content_dirs()
 	var ret = content.load_image_config(Config.current_dir)
 	if not ret:
 		print("Load Image Config Failed")
@@ -156,7 +159,7 @@ func _ready() -> void:
 	# Make sure the frame is behind the picture
 	picture_border_image.z_index = -1
 # Step 6
-
+	no_more_pictures_dialog.set_content_pointer(content)
 
 # _process(delta)
 # Called once per frame
@@ -253,8 +256,12 @@ func picture_completed(sw: String):
 		"next":
 			next_picture()
 			if no_more_pictures:
-				Sfx.game_over()
-				no_more_pictures_dialog.display_no_more_pictures()
+				if content.get_next_content_dir() != -1:
+					Config.current_picture = 0
+					return
+				else:
+					Sfx.game_over()
+					no_more_pictures_dialog.display_no_more_pictures()
 				
 		"quit":
 			exit_game_requested.emit()

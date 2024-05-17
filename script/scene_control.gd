@@ -27,7 +27,7 @@ extends Node
 
 # enums
 
-enum scene {GAME_CONTROL, HELP, GAME_PLAY}
+enum scene {GAME_CONTROL, HELP, GAME_PLAY, DOWNLOAD_MANAGER}
 
 # constants
 
@@ -35,8 +35,9 @@ enum scene {GAME_CONTROL, HELP, GAME_PLAY}
 const GAME_CONTROL_SCENE := "res://scene/game_control.tscn"
 const HELP_SCENE := "res://scene/help.tscn"
 const GAME_PLAY_SCENE := "res://scene/game_play.tscn"
+const DOWNLOAD_MANAGER_SCENE := "res://scene/download_manager.tscn"
 
-const SCENES := [GAME_CONTROL_SCENE, HELP_SCENE, GAME_PLAY_SCENE]
+const SCENES := [GAME_CONTROL_SCENE, HELP_SCENE, GAME_PLAY_SCENE, DOWNLOAD_MANAGER_SCENE]
 
 # exports (The following properties must be set in the Inspector by the designer)
 

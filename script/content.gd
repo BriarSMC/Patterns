@@ -57,18 +57,6 @@ var image_data := {}					# Pointer to the image data
 
 # Virtual Godot methods
 
-# _ready()
-# Called when node is ready
-#
-# Parameters
-#		None
-# Return
-#		None
-#==
-# Get the current directories in the res:// and user:// trees
-#func _ready() -> void:
-	#get_content_dirs()
-
 
 # Built-in Signal Callbacks
 
@@ -78,7 +66,7 @@ var image_data := {}					# Pointer to the image data
 
 # Public Methods
 
-# get_content_dirs()
+# load_content_dirs()
 # Build array of Content Directories
 #
 #
@@ -89,7 +77,7 @@ var image_data := {}					# Pointer to the image data
 #==
 # Step 1: Make distribution directory first in list
 # Step 2: Loop through all the downloaded directories and append to list
-func get_content_dirs() -> void:
+func load_content_dirs() -> void:
 # Step 1
 	content_dirs.append(Constant.DIST_CONTENT_DIR + "000/")
 # Step 2
@@ -102,9 +90,6 @@ func get_content_dirs() -> void:
 			dir_name = dir.get_next()
 	print("Content dirs: ", content_dirs)
 	
-	
-# Private Methods
-
 
 # load_image_config(index)
 # Load image configuration for the specified directory
@@ -146,6 +131,24 @@ func get_picture(dir_ndx: int, image_ndx: int) -> Dictionary:
 	else:
 		return {}
 		
+# get_next_content_dir()
+# Get the next content directory
+#
+# Parameters
+#	None
+# Return
+#	int								Index into content_dirs of the next directory
+#	-1								No more directories
+#==
+# See if any more directories exist.
+# If so, return the index
+# Otherwise return a -1
+func get_next_content_dir() -> int:
+	Config.current_dir += 1
+	return content_dirs.find("%03d" % (Config.current_dir))
+	
+	
+# Private Methods
 			
 # Subclasses
 

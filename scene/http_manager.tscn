@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://ct14e6inbu0xd"]
+
+[ext_resource type="Script" path="res://script/http_manager.gd" id="1_mkwgi"]
+
+[node name="HTTPManager" type="Node"]
+script = ExtResource("1_mkwgi")
