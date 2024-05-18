@@ -16,6 +16,11 @@ extends CanvasLayer
 
 # constants
 
+const ERRMSG_NOHTTP = "Could not connect to Patterns server."
+const ERRMSG_PLSCHK = "Please check your internet connection"
+const ERRMSG_DLFAIL = "Could not download requested content"
+const ERRMSG_CHKSRV = "Please check https://games.coghillclan.net/ for availability"
+
 # exports (The following properties must be set in the Inspector by the designer)
 
 # public variables
@@ -30,6 +35,10 @@ var downloaded_dirs: PackedStringArray
 @onready var zip_manager: ZIPManager = $ZIPManager
 @onready var http_manager: HTTPManager = $HTTPManager
 @onready var loading_spinner = $LoadingSpinner
+@onready var error_message = $ErrorMessage
+@onready var message_1 = $ErrorMessage/MessagesVbox/Message1
+@onready var message_2 = $ErrorMessage/MessagesVbox/Message2
+@onready var scene_control = $SceneControl
 
 #endregion
 
@@ -45,19 +54,32 @@ var downloaded_dirs: PackedStringArray
 #		None
 #==
 func _ready():
+	error_message.visible = false
 	loading_spinner.visible = false
 	set_current_downloads()
 	set_available_downloads()
-	
+	scene_control.load_scene(scene_control.scene.GAME_PLAY)
 
 
 # Built-in Signal Callbacks
 
+func _on_continue_btn_pressed():
+	scene_control.change_scene(scene_control.scene.GAME_PLAY, self)
 
+
+func _on_quit_btn_pressed():
+	get_tree().quit()
+	
+	
 # Custom Signal Callbacks
 
 func download_clicked(index: int) -> void:
 	var zippath: String = await download_zipfile(index)
+	if zippath == "":
+		error_message.visible = true
+		message_1.text = ERRMSG_DLFAIL
+		message_2.text = ERRMSG_CHKSRV
+		return
 	zip_manager.unzip_content(zippath)
 	set_current_downloads()
 	set_available_downloads()
@@ -111,12 +133,14 @@ func set_current_downloads() -> void:
 # Step 2 - If we don't have an http connection to the server config file then
 #	display the default message
 #	turn off the spinner
-# Step 3 - Turn off the default message
-# Step 4 - Loop dirs in the config file
+
+# Step 3 - See if http downloaded the server config file
+# Step 4 - Turn off the default message
+# Step 5 - Loop dirs in the config file
 #	HTTPManager.we_have_http() will download the server config file
 #	Create a button for the directory
 #	Connect to our signal handler for when the button is pressed
-# Step 5 - We're finished so turn off the spinner
+# Step 6 - We're finished so turn off the spinner
 func set_available_downloads() -> void:
 	print("Downloaded dirs: ", downloaded_dirs)
 # Step 1
@@ -124,12 +148,24 @@ func set_available_downloads() -> void:
 # Step 2
 	var container = $AvailableDownloads/MarginContainer/AvailableDownloadsVbox
 	if not await http_manager.we_have_http():
-		$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = true
+		#$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = true
 		loading_spinner.visible = false
+		message_1.text = ERRMSG_NOHTTP
+		message_2.text = ERRMSG_PLSCHK
+		error_message.visible = true
+		$AvailableDownloads.visible = false
 		return
 # Step 3	
-	$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = false
+	if http_manager.content_config.is_empty():
+		loading_spinner.visible = false
+		message_1.text = ERRMSG_DLFAIL
+		message_2.text = ERRMSG_CHKSRV
+		error_message.visible = true
+		$AvailableDownloads.visible = false
+		return
 # Step 4
+	$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = false
+# Step 5
 	for o in container.get_children():
 		o.queue_free()
 
@@ -144,7 +180,7 @@ func set_available_downloads() -> void:
 			btn.disabled = true
 		
 		btn.connect("pressed", download_clicked.bind(c))
-# Step 5
+# Step 6
 	loading_spinner.visible = false
 	
 # download_zipfile(index)
@@ -153,21 +189,25 @@ func set_available_downloads() -> void:
 # Parameters
 #	index: int						Number of the ZIP file
 # Return
-#	None
+#	String							The distination file path (blank if failed)
 #==
-# What the code is doing (steps)
+# Step 1 - Create the source URL and destination path
+# Step 2 - Start the spinner and get the file from server
+#	if the download failed, then return an empty string
 func download_zipfile(index: int) -> String:
+# Step 1
 	var zipname = "%s%03d.zip" % [Constant.CONTENT_SERVER, index]
 	var destname = "%s%03d.zip" % [Constant.CONTENT_DIR, index]
-	
+# Step 2
 	loading_spinner.visible = true
-	await http_manager.download_file(zipname, destname)
-
+	if not await http_manager.download_file(zipname, destname):
+		destname = ""
 	loading_spinner.visible = false
 	return destname
 	
 	
 # Subclasses
+
 
 
 

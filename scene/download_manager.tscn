@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cmysiyww8ginr"]
+[gd_scene load_steps=15 format=3 uid="uid://cmysiyww8ginr"]
 
 [ext_resource type="Script" path="res://script/download_manager.gd" id="1_3axb2"]
 [ext_resource type="Theme" uid="uid://dafyk5gqn31av" path="res://themes/game_control.tres" id="2_vjdcy"]
@@ -6,13 +6,22 @@
 [ext_resource type="PackedScene" uid="uid://blssvf5cqchjw" path="res://scene/zip_manager.tscn" id="4_7olhs"]
 [ext_resource type="PackedScene" uid="uid://ct14e6inbu0xd" path="res://scene/http_manager.tscn" id="5_damjk"]
 [ext_resource type="PackedScene" uid="uid://d0yy4jawhpyny" path="res://scene/loading_spinner.tscn" id="6_sg1c8"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_voicq"]
-font_size = 32
-font_color = Color(0.0764519, 0.0850188, 0.644825, 1)
+[ext_resource type="Texture2D" uid="uid://cw2llsexe5qc1" path="res://images/UI/green_button04.png" id="7_gm46l"]
+[ext_resource type="Texture2D" uid="uid://3wkm045boqsr" path="res://images/UI/yellow_button04.png" id="8_ewoip"]
+[ext_resource type="Texture2D" uid="uid://cilaaqgw03lfd" path="res://images/UI/blue_button04.png" id="9_47845"]
+[ext_resource type="LabelSettings" uid="uid://jcrrhasjrhex" path="res://themes/texture_button_label.tres" id="10_s5wv7"]
+[ext_resource type="PackedScene" uid="uid://d1e1864cewhou" path="res://scene/scene_control.tscn" id="11_vs3bw"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_y26cr"]
 font_size = 48
+font_color = Color(0.0764519, 0.0850188, 0.644825, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_tnau5"]
+font_size = 28
+font_color = Color(0.875639, 0.130691, 0.130691, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_voicq"]
+font_size = 32
 font_color = Color(0.0764519, 0.0850188, 0.644825, 1)
 
 [node name="DownloadManager" type="CanvasLayer"]
@@ -25,6 +34,75 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.736631, 0.898268, 0.84759, 1)
+
+[node name="ScreenTitle" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+theme = ExtResource("2_vjdcy")
+
+[node name="Label" type="Label" parent="ScreenTitle"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -217.5
+offset_right = 217.5
+offset_bottom = 76.0
+grow_horizontal = 2
+text = "Download Manager"
+label_settings = SubResource("LabelSettings_y26cr")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LoadingSpinner" parent="." instance=ExtResource("6_sg1c8")]
+
+[node name="ErrorMessage" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(800, 200)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.815686, 0.815686, 0.815686, 1)
+
+[node name="MessagesVbox" type="VBoxContainer" parent="ErrorMessage"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -70.5
+offset_top = -41.0
+offset_right = 70.5
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Message1" type="Label" parent="ErrorMessage/MessagesVbox"]
+layout_mode = 2
+text = "Message 1
+"
+label_settings = SubResource("LabelSettings_tnau5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Message2" type="Label" parent="ErrorMessage/MessagesVbox"]
+layout_mode = 2
+text = "Message 2
+"
+label_settings = SubResource("LabelSettings_tnau5")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CurrenbDownloads" type="VBoxContainer" parent="."]
 anchors_preset = -1
@@ -81,25 +159,71 @@ label_settings = SubResource("LabelSettings_voicq")
 [node name="AvailableDownloadsVbox" type="VBoxContainer" parent="AvailableDownloads/MarginContainer"]
 layout_mode = 2
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 5
+[node name="ButtonsArea" type="MarginContainer" parent="."]
+anchors_preset = 7
 anchor_left = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -192.0
+offset_top = -64.0
+offset_right = 192.0
 grow_horizontal = 2
-theme = ExtResource("2_vjdcy")
+grow_vertical = 0
+theme_override_constants/margin_bottom = 15
 
-[node name="Label" type="Label" parent="Control"]
+[node name="ButtonsHbox" type="HBoxContainer" parent="ButtonsArea"]
+layout_mode = 2
+
+[node name="ContinueBtn" type="TextureButton" parent="ButtonsArea/ButtonsHbox"]
+layout_mode = 2
+texture_normal = ExtResource("7_gm46l")
+texture_pressed = ExtResource("8_ewoip")
+texture_hover = ExtResource("9_47845")
+
+[node name="Label" type="Label" parent="ButtonsArea/ButtonsHbox/ContinueBtn"]
 layout_mode = 1
-anchors_preset = 5
+anchors_preset = -1
 anchor_left = 0.5
+anchor_top = 0.5
 anchor_right = 0.5
-offset_left = -217.5
-offset_right = 217.5
-offset_bottom = 76.0
+anchor_bottom = 0.5
+offset_left = -34.5
+offset_top = -33.5
+offset_right = 35.5
+offset_bottom = 23.5
 grow_horizontal = 2
-text = "Download Manager"
-label_settings = SubResource("LabelSettings_y26cr")
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.0666667, 0.0235294, 0.270588, 1)
+text = "Continue"
+label_settings = ExtResource("10_s5wv7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuitBtn" type="TextureButton" parent="ButtonsArea/ButtonsHbox"]
+layout_mode = 2
+texture_normal = ExtResource("7_gm46l")
+texture_pressed = ExtResource("8_ewoip")
+texture_hover = ExtResource("9_47845")
+
+[node name="Label" type="Label" parent="ButtonsArea/ButtonsHbox/QuitBtn"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -34.5
+offset_top = -33.5
+offset_right = 35.5
+offset_bottom = 23.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.0666667, 0.0235294, 0.270588, 1)
+text = "Quit"
+label_settings = ExtResource("10_s5wv7")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -109,4 +233,7 @@ vertical_alignment = 1
 
 [node name="HTTPManager" parent="." instance=ExtResource("5_damjk")]
 
-[node name="LoadingSpinner" parent="." instance=ExtResource("6_sg1c8")]
+[node name="SceneControl" parent="." instance=ExtResource("11_vs3bw")]
+
+[connection signal="pressed" from="ButtonsArea/ButtonsHbox/ContinueBtn" to="." method="_on_continue_btn_pressed"]
+[connection signal="pressed" from="ButtonsArea/ButtonsHbox/QuitBtn" to="." method="_on_quit_btn_pressed"]

@@ -66,6 +66,7 @@ func we_have_http() -> bool:
 	var http = HTTPRequest.new()
 	add_child(http)
 	
+	content_config.clear()
 	var ret = http.request(Constant.CONTENT_SERVER + "config.json")
 	if ret != 0: 
 		http.queue_free()
@@ -74,7 +75,7 @@ func we_have_http() -> bool:
 	var response = await http.request_completed
 	if not(response[0] == 0 and response[1] == 200):
 		http.queue_free()
-		return false
+		return true
 # Step 3
 	var json := JSON.new()
 	json.parse(response[3].get_string_from_utf8())
@@ -95,7 +96,7 @@ func we_have_http() -> bool:
 # Step 2 - Wait for the response from the server
 # Step 3 - Create the dest directories as needed
 # Step 4 - Write the response to the dest path
-func download_file(src: String, dest: String) -> void:
+func download_file(src: String, dest: String) -> bool:
 # Step 1
 	var http = HTTPRequest.new()
 	add_child(http)
@@ -104,13 +105,13 @@ func download_file(src: String, dest: String) -> void:
 	if ret != 0: 
 		http.queue_free()
 		print("http request failed: ", ret)
-		return
+		return false
 # Step 2
 	var response = await http.request_completed
 	if not(response[0] == 0 and response[1] == 200):
 		http.queue_free()
 		print("http request complete failed: ", response[0], ' ', response[1])
-		return
+		return false
 # Step 3
 	var content_dir = DirAccess.open("user://")
 	content_dir.make_dir_recursive(dest.get_base_dir())
@@ -118,6 +119,8 @@ func download_file(src: String, dest: String) -> void:
 	var fa: FileAccess = FileAccess.open(dest, FileAccess.WRITE)
 	fa.store_buffer(response[3])
 	fa.close()
+	
+	return true
 	
 	
 # Private Methods
