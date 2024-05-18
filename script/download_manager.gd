@@ -56,6 +56,8 @@ func _ready():
 
 # Custom Signal Callbacks
 
+func download_clicked(index: int) -> void:
+	print("Download ", index)
 
 # Public Methods
 
@@ -88,6 +90,7 @@ func set_current_downloads() -> void:
 			container.add_child(label)
 			label.text = d
 			label.visible = true
+			label.label_settings = $CurrenbDownloads/MarginContainer/CurrentDownloadLabel.label_settings
 
 
 # set_available_downloads()
@@ -98,22 +101,39 @@ func set_current_downloads() -> void:
 # Return
 #	None
 #==
-# What the code is doing (steps)
+# Step 1 - Turn on the loading spinner
+# Step 2 - If we don't have an http connection to the server config file then
+#	display the default message
+#	turn off the spinner
+# Step 3 - Turn off the default message
+# Step 4 - Loop dirs in the config file
+#	HTTPManager.we_have_http() will download the server config file
+#	Create a button for the directory
+#	Connect to our signal handler for when the button is pressed
+# Step 5 - We're finished so turn off the spinner
 func set_available_downloads() -> void:
-	var container = $AvailableDownloads/MarginContainer
+# Step 1
+	loading_spinner.visible = true	
+# Step 2
+	var container = $AvailableDownloads/MarginContainer/AvailableDownloadsVbox
 	if not await http_manager.we_have_http():
 		$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = true
+		loading_spinner.visible = false
 		return
+# Step 3	
 	$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = false
-	loading_spinner.visible = true	
-	print(http_manager.content_config.version)
+# Step 4
 	for c in http_manager.content_config.dirs:
-		print(c)
-		var label = Label.new()
-		container.add_child(label)
-		label.text = str(c)
-		label.visible = true
+		var btn = Button.new()
+		container.add_child(btn)
+		btn.custom_minimum_size.x = 200
+		btn.text = "Download %03d" % c
+		btn.anchors_preset = 6
+		btn.connect("pressed", download_clicked.bind(c))
+# Step 5
 	loading_spinner.visible = false
+	
+	
 # Subclasses
 
 
