@@ -81,6 +81,45 @@ func we_have_http() -> bool:
 	content_config = json.get_data()
 	return true
 
+
+# download_file(src, dest) 
+# Download a file to specified location
+#
+# Parameters
+#	src: String						Source file name on remote server
+#	dest: String					Destination path
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func download_file(src: String, dest: String) -> void:
+	print("Downloading ", src)
+	print("Destination ", dest)
+
+# Step 1
+	var http = HTTPRequest.new()
+	add_child(http)
+	
+	var ret = http.request(src)
+	if ret != 0: 
+		http.queue_free()
+		print("http request failed: ", ret)
+		return
+# Step 2
+	var response = await http.request_completed
+	if not(response[0] == 0 and response[1] == 200):
+		http.queue_free()
+		print("http request complete failed: ", response[0], ' ', response[1])
+		return
+# Step 3
+	var content_dir = DirAccess.open("user://")
+	content_dir.make_dir_recursive(dest.get_base_dir())
+# Step 4
+	var fa: FileAccess = FileAccess.open(dest, FileAccess.WRITE)
+	fa.store_buffer(response[3])
+	fa.close()
+	
+	
 # Private Methods
 
 

@@ -57,7 +57,7 @@ func _ready():
 # Custom Signal Callbacks
 
 func download_clicked(index: int) -> void:
-	print("Download ", index)
+	download_zipfile(index)
 
 # Public Methods
 
@@ -133,7 +133,24 @@ func set_available_downloads() -> void:
 # Step 5
 	loading_spinner.visible = false
 	
+# download_zipfile(index)
+# Download specified ZIP file from the server
+#
+# Parameters
+#	index: int						Number of the ZIP file
+# Return
+#	None
+#==
+# What the code is doing (steps)
+func download_zipfile(index: int) -> void:
+	var zipname = "%s%03d.zip" % [Constant.CONTENT_SERVER, index]
+	var destname = "%s%03d.zip" % [Constant.CONTENT_DIR, index]
 	
+	loading_spinner.visible = true
+	await http_manager.download_file(zipname, destname)
+
+	loading_spinner.visible = false
+
 # Subclasses
 
 
