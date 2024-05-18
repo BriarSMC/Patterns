@@ -91,11 +91,11 @@ func we_have_http() -> bool:
 # Return
 #	None
 #==
-# What the code is doing (steps)
+# Step 1 - Initiate the http download request for the src URL
+# Step 2 - Wait for the response from the server
+# Step 3 - Create the dest directories as needed
+# Step 4 - Write the response to the dest path
 func download_file(src: String, dest: String) -> void:
-	print("Downloading ", src)
-	print("Destination ", dest)
-
 # Step 1
 	var http = HTTPRequest.new()
 	add_child(http)

@@ -51,6 +51,9 @@ size_flags_vertical = 0
 text = "None"
 label_settings = SubResource("LabelSettings_voicq")
 
+[node name="CurrentDownloadsVbox" type="VBoxContainer" parent="CurrenbDownloads/MarginContainer"]
+layout_mode = 2
+
 [node name="AvailableDownloads" type="VBoxContainer" parent="."]
 anchors_preset = -1
 anchor_left = 0.75

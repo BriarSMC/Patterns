@@ -22,3 +22,4 @@ func unzip_content(src: String) -> void:
 			var fa := FileAccess.open(Constant.CONTENT_DIR + f, FileAccess.WRITE)
 			fa.store_buffer(zr.read_file(f))
 	zr.close()
+	content_dir.remove(src)

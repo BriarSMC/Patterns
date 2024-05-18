@@ -57,7 +57,10 @@ func _ready():
 # Custom Signal Callbacks
 
 func download_clicked(index: int) -> void:
-	download_zipfile(index)
+	var zippath: String = await download_zipfile(index)
+	zip_manager.unzip_content(zippath)
+	set_current_downloads()
+	set_available_downloads()
 
 # Public Methods
 
@@ -77,7 +80,7 @@ func download_clicked(index: int) -> void:
 # If it's empty, then just display the 'none' label
 # Otherwise, display the contents of the 
 func set_current_downloads() -> void:
-	var container = $CurrenbDownloads/MarginContainer
+	var container = $CurrenbDownloads/MarginContainer/CurrentDownloadsVbox
 	content.load_content_dirs()
 	downloaded_dirs = content.content_dirs.duplicate()
 	downloaded_dirs.remove_at(0)
@@ -85,10 +88,13 @@ func set_current_downloads() -> void:
 		$CurrenbDownloads/MarginContainer/CurrentDownloadLabel.visible = true
 	else:
 		$CurrenbDownloads/MarginContainer/CurrentDownloadLabel.visible = false
-		for d in downloaded_dirs:
+		for o in container.get_children():
+			o.queue_free()
+		for d: int in downloaded_dirs.size():# String in downloaded_dirs:
 			var label = Label.new()
 			container.add_child(label)
-			label.text = d
+			downloaded_dirs[d] = downloaded_dirs[d].get_slicec('/'.unicode_at(0), 3)
+			label.text = downloaded_dirs[d]
 			label.visible = true
 			label.label_settings = $CurrenbDownloads/MarginContainer/CurrentDownloadLabel.label_settings
 
@@ -112,6 +118,7 @@ func set_current_downloads() -> void:
 #	Connect to our signal handler for when the button is pressed
 # Step 5 - We're finished so turn off the spinner
 func set_available_downloads() -> void:
+	print("Downloaded dirs: ", downloaded_dirs)
 # Step 1
 	loading_spinner.visible = true	
 # Step 2
@@ -123,12 +130,19 @@ func set_available_downloads() -> void:
 # Step 3	
 	$AvailableDownloads/MarginContainer/CurrentDownloadLabel.visible = false
 # Step 4
+	for o in container.get_children():
+		o.queue_free()
+
 	for c in http_manager.content_config.dirs:
 		var btn = Button.new()
+		var c_str = "%03d" % c
 		container.add_child(btn)
 		btn.custom_minimum_size.x = 200
-		btn.text = "Download %03d" % c
+		btn.text = "Download %s" % c_str
 		btn.anchors_preset = 6
+		if downloaded_dirs.find(c_str) != -1:
+			btn.disabled = true
+		
 		btn.connect("pressed", download_clicked.bind(c))
 # Step 5
 	loading_spinner.visible = false
@@ -142,7 +156,7 @@ func set_available_downloads() -> void:
 #	None
 #==
 # What the code is doing (steps)
-func download_zipfile(index: int) -> void:
+func download_zipfile(index: int) -> String:
 	var zipname = "%s%03d.zip" % [Constant.CONTENT_SERVER, index]
 	var destname = "%s%03d.zip" % [Constant.CONTENT_DIR, index]
 	
@@ -150,7 +164,9 @@ func download_zipfile(index: int) -> void:
 	await http_manager.download_file(zipname, destname)
 
 	loading_spinner.visible = false
-
+	return destname
+	
+	
 # Subclasses
 
 

@@ -79,6 +79,7 @@ var image_data := {}					# Pointer to the image data
 # Step 2: Loop through all the downloaded directories and append to list
 func load_content_dirs() -> void:
 # Step 1
+	content_dirs.clear()
 	content_dirs.append(Constant.DIST_CONTENT_DIR + "000/")
 # Step 2
 	var dir = DirAccess.open(Constant.CONTENT_DIR)
