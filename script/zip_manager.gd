@@ -1,4 +1,4 @@
-class_name ZIPManager
+class_name ZIPManager # TODO: Delete this class
 extends Node
 
 

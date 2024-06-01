@@ -12,6 +12,9 @@ extends Node
 
 # signals
 
+signal stats_updated (f_size: int, f_bytes: int)
+signal download_completed
+
 # enums
 
 # constants
@@ -24,6 +27,12 @@ var content_config: Dictionary
 
 # private variables
 
+var http: HTTPRequest
+var file_size: int
+var bytes_downloaded: int
+var file_name: String
+var download_inprogress: bool
+
 # onready variables
 
 #endregion
@@ -31,6 +40,14 @@ var content_config: Dictionary
 
 # Virtual Godot methods
 
+func _ready():
+	download_inprogress = false
+	
+func _process(delta):
+	if download_inprogress: 
+		update_stats()
+		stats_updated.emit(file_size, bytes_downloaded)
+	
 
 
 # Built-in Signal Callbacks
@@ -98,33 +115,60 @@ func we_have_http() -> bool:
 # Step 4 - Write the response to the dest path
 func download_file(src: String, dest: String) -> bool:
 # Step 1
-	var http = HTTPRequest.new()
+	http = HTTPRequest.new()
+	http.timeout = 0.0
+	http.download_file = dest
+	file_name = dest
 	add_child(http)
+	var headers: Dictionary
 	
-	var ret = http.request(src)
+	var ret = http.request(src, ['Accept-Encoding: identity'], HTTPClient.METHOD_HEAD)
+	if ret != 0:
+		http.queue_free()
+		print("HEAD request failed")
+		return false
+	var response = await http.request_completed
+	headers = array_to_dictionary(response[2])
+	file_size = int(headers["content-length"])
+	
+	ret = http.request(src)
 	if ret != 0: 
 		http.queue_free()
 		print("http request failed: ", ret)
 		return false
+
 # Step 2
-	var response = await http.request_completed
+	download_inprogress = true
+	response = await http.request_completed
 	if not(response[0] == 0 and response[1] == 200):
 		http.queue_free()
 		print("http request complete failed: ", response[0], ' ', response[1])
 		return false
-# Step 3
-	var content_dir = DirAccess.open("user://")
-	content_dir.make_dir_recursive(dest.get_base_dir())
-# Step 4
-	var fa: FileAccess = FileAccess.open(dest, FileAccess.WRITE)
-	fa.store_buffer(response[3])
-	fa.close()
+	download_inprogress = false
 	
 	return true
 	
 	
 # Private Methods
 
+func array_to_dictionary(arr: Array, sep: String = ":", strip: bool = true) -> Dictionary:
+	var stripval = " "
+	if not strip:
+		stripval = ""
+	var ret: Dictionary = {}
+	for item in arr:
+		ret[item.get_slice(sep, 0)] = item.get_slice(sep, 1).lstrip(stripval)
+	return ret
+	
+	
+func update_stats() -> void:
+	var error : int
+	var _file = FileAccess.open(file_name, FileAccess.READ)
+	error = FileAccess.get_open_error()
+
+	if error == OK:
+		bytes_downloaded  = _file.get_length()
+		_file.close()
 
 # Subclasses
 

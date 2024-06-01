@@ -159,11 +159,11 @@ func display_no_more_pictures() -> void:
 func remote_content_available() -> bool:
 	print("Remote Content Available")
 	print(content_config)
-	var ver = content_config.version
-	var dirs = content_config.dirs
-	return (dirs > Config.current_dir)
+	#var ver = content_config.version
+	var dirs = http.content_config.dirs
+	return (dirs[-1] > Config.current_dir)
 
-
+# TODO: Delete method
 # fownload_content()
 # Download additional content
 #
@@ -190,30 +190,30 @@ func remote_content_available() -> bool:
 #	None
 #==
 # What the code is doing (steps)
-func download_content() -> void:
-	var content_dir = DirAccess.open(Constant.CONTENT_DIR)
-	for index in range(Config.current_dir + 1, content_config.dirs.size()):
-		var dir = ("!03d") % index
-		var http := HTTPRequest.new()
-		add_child(http)
-		var ret = http.request(Constant.CONTENT_SERVER + dir + "/image_data.tres")
-		if ret != 0: 
-			http.queue_free()
-		else:	
-	# Step 2
-			var response = await http.request_completed
-			if not(response[0] == 0 and response[1] == 200):
-				http.queue_free()
-			else:
-		# Step 3
-				var json := JSON.new()
-				json.parse(response[3].get_string_from_utf8())
-				content_config = json.get_data()
-				json.queue_free()
-				content_dir.make_dir("./" + dir)
-				var file = FileAccess.open(Constant.CONTENT_DIR + dir + "/image_data.tres", FileAccess.WRITE)
-				file.store_string(response[3])
-				file.close()
+#func download_content() -> void:
+	#var content_dir = DirAccess.open(Constant.CONTENT_DIR)
+	#for index in range(Config.current_dir + 1, content_config.dirs.size()):
+		#var dir = ("!03d") % index
+		#var req := HTTPRequest.new()
+		#add_child(req)
+		#var ret = req.request(Constant.CONTENT_SERVER + dir + "/image_data.tres")
+		#if ret != 0: 
+			#req.queue_free()
+		#else:	
+	## Step 2
+			#var response = await req.request_completed
+			#if not(response[0] == 0 and response[1] == 200):
+				#req.queue_free()
+			#else:
+		## Step 3
+				#var json := JSON.new()
+				#json.parse(response[3].get_string_from_utf8())
+				#content_config = json.get_data()
+				#json.queue_free()
+				#content_dir.make_dir("./" + dir)
+				#var file = FileAccess.open(Constant.CONTENT_DIR + dir + "/image_data.tres", FileAccess.WRITE)
+				#file.store_string(response[3])
+				#file.close()
 		
 
 # Subclasses

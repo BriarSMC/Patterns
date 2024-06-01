@@ -4,7 +4,7 @@ extends CanvasLayer
 
 
 #region Description
-# <description>
+# Manage DLC
 #endregion
 
 
@@ -32,13 +32,17 @@ var downloaded_dirs: PackedStringArray
 # onready variables
 
 @onready var content: Content = $Content
-@onready var zip_manager: ZIPManager = $ZIPManager
+#@onready var zip_manager: ZIPManager = $ZIPManager # TODO: Remove
 @onready var http_manager: HTTPManager = $HTTPManager
 @onready var loading_spinner = $LoadingSpinner
 @onready var error_message = $ErrorMessage
 @onready var message_1 = $ErrorMessage/MessagesVbox/Message1
 @onready var message_2 = $ErrorMessage/MessagesVbox/Message2
 @onready var scene_control = $SceneControl
+@onready var progress_box = $ProgressBox
+@onready var progress = $ProgressBox/Progress
+@onready var progress_bar = $ProgressBox/Progress/ProgressBar
+@onready var sizes = $ProgressBox/Progress/Sizes
 
 #endregion
 
@@ -56,10 +60,10 @@ var downloaded_dirs: PackedStringArray
 func _ready():
 	error_message.visible = false
 	loading_spinner.visible = false
+	progress_box.visible = false
 	set_current_downloads()
 	set_available_downloads()
 	scene_control.load_scene(scene_control.scene.GAME_PLAY)
-
 
 # Built-in Signal Callbacks
 
@@ -74,15 +78,22 @@ func _on_quit_btn_pressed():
 # Custom Signal Callbacks
 
 func download_clicked(index: int) -> void:
-	var zippath: String = await download_zipfile(index)
-	if zippath == "":
+	loading_spinner.visible = false
+	var dlcpath: String = await download_dlcfile(index)
+	if dlcpath == "":
 		error_message.visible = true
 		message_1.text = ERRMSG_DLFAIL
 		message_2.text = ERRMSG_CHKSRV
 		return
-	zip_manager.unzip_content(zippath)
 	set_current_downloads()
 	set_available_downloads()
+
+
+func _on_http_manager_stats_updated(f_size: int, f_bytes: int):
+	progress_bar.max_value = f_size
+	progress_bar.value = f_bytes
+	sizes.text = String.humanize_size(f_bytes) + "/" + String.humanize_size(f_size)
+	progress_box.visible = true
 
 # Public Methods
 
@@ -183,32 +194,29 @@ func set_available_downloads() -> void:
 # Step 6
 	loading_spinner.visible = false
 	
-# download_zipfile(index)
-# Download specified ZIP file from the server
+# download_dlcfile(index)
+# Download specified DLC file from the server
 #
 # Parameters
-#	index: int						Number of the ZIP file
+#	index: int						Number of the DLC file
 # Return
 #	String							The distination file path (blank if failed)
 #==
 # Step 1 - Create the source URL and destination path
 # Step 2 - Start the spinner and get the file from server
 #	if the download failed, then return an empty string
-func download_zipfile(index: int) -> String:
+func download_dlcfile(index: int) -> String:
 # Step 1
-	var zipname = "%s%03d.zip" % [Constant.CONTENT_SERVER, index]
-	var destname = "%s%03d.zip" % [Constant.CONTENT_DIR, index]
+	var dlcname = "%s%s/set_%03d.pck" % [Constant.CONTENT_SERVER, Config.os_name, index]
+	var destname = "%sset_%03d.pck" % [Constant.CONTENT_DIR, index]
+	printt(dlcname, destname)
 # Step 2
-	loading_spinner.visible = true
-	if not await http_manager.download_file(zipname, destname):
+	if not await http_manager.download_file(dlcname, destname):
 		destname = ""
-	loading_spinner.visible = false
+	progress_box.visible = false
 	return destname
 	
 	
 # Subclasses
-
-
-
 
 

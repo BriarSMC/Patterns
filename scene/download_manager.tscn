@@ -57,9 +57,54 @@ label_settings = SubResource("LabelSettings_y26cr")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ProgressBox" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(300, 150)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.116538, 0.0380321, 0.540732, 1)
+
+[node name="Progress" type="VBoxContainer" parent="ProgressBox"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -52.0
+offset_right = 100.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="ProgressBox/Progress"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_vjdcy")
+step = 1.0
+
+[node name="Sizes" type="Label" parent="ProgressBox/Progress"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_vjdcy")
+text = "xxxx/xxxx"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="LoadingSpinner" parent="." instance=ExtResource("6_sg1c8")]
 
 [node name="ErrorMessage" type="ColorRect" parent="."]
+visible = false
 custom_minimum_size = Vector2(800, 200)
 anchors_preset = 8
 anchor_left = 0.5
@@ -237,3 +282,4 @@ vertical_alignment = 1
 
 [connection signal="pressed" from="ButtonsArea/ButtonsHbox/ContinueBtn" to="." method="_on_continue_btn_pressed"]
 [connection signal="pressed" from="ButtonsArea/ButtonsHbox/QuitBtn" to="." method="_on_quit_btn_pressed"]
+[connection signal="stats_updated" from="HTTPManager" to="." method="_on_http_manager_stats_updated"]

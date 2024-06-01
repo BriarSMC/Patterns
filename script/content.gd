@@ -4,15 +4,15 @@ extends Node2D
 
 #region Description
 # This node is repsonsible to controlling access to the game's puzzle 
-# content (directories, images and ImageData resources).
+# content (DLCs, directories, images and ImageData resources).
 #
 # The content for this game is stored in multiple directories. Each
 # directory is a set of puzzle images plus a configuration file 
 # for the images in that directory.
 #
 # These directories are numbered 000-999 (as 3-character strings). 000
-# is delivered as part the game's executable image and is in the res://
-# tree. The others are in the user:// tree.
+# is delivered as part the game's executable image and is in the res://content
+# tree.
 # 
 # The player_data resource always keeps which directory the player is using
 # and what image is next for them. When the player exhausts the images in
@@ -75,20 +75,26 @@ var image_data := {}					# Pointer to the image data
 # Return
 #	None
 #==
-# Step 1: Make distribution directory first in list
-# Step 2: Loop through all the downloaded directories and append to list
+# Step 1: Make game image's directory (res://content/000) first in list
+# Step 2: Loop through all the downloaded content in user:// and append to list
+#	Set up a regex to look for "set_nnn.dlc" in file name where nnn is a 3-digit number
+#	Test the file name against our regex and if it's true, append dlc number to our list.
 func load_content_dirs() -> void:
 # Step 1
 	content_dirs.clear()
 	content_dirs.append(Constant.DIST_CONTENT_DIR + "000/")
 # Step 2
+	var regex = RegEx.new()
+	regex.compile("set_(<dlc_num>%d%d%d)\\.dlc")
 	var dir = DirAccess.open(Constant.CONTENT_DIR)
 	if dir:
 		dir.list_dir_begin()
-		var dir_name = dir.get_next()
-		while not dir_name.is_empty():
-			content_dirs.append(Constant.CONTENT_DIR + dir_name + "/")
-			dir_name = dir.get_next()
+		var dlc_name = dir.get_next()
+		while not dlc_name.is_empty():
+			var result = regex.search(dlc_name)
+			if result:
+				content_dirs.append(Constant.CONTENT_DIR + result.dlc_num + "/")
+			dlc_name = dir.get_next()
 	print("Content dirs: ", content_dirs)
 	
 
@@ -124,13 +130,18 @@ func load_image_config(index: int) -> bool:
 # Convert the value in num to "0000" format
 # See if the key exists in the image dictionary
 # If so, then return a dictionary containing the image's data
-# Otherwise, return an empty dictionary
+# Otherwise, See if there is another directory available
 func get_picture(dir_ndx: int, image_ndx: int) -> Dictionary:
 	var key: String = ("%04d" % image_ndx)
 	if image_data.has(key):
 		return {"image": content_dirs[dir_ndx] + image_data[key].image, "pattern_list": image_data[key].pattern_list}
-	else:
-		return {}
+	
+	if dir_ndx + 1 < content_dirs.size():
+		var dir = get_next_content_dir()
+		return {"image": content_dirs[dir] + image_data["0000"].image, "pattern_list": image_data["0000"].pattern_list}
+		
+	
+	return {}
 		
 # get_next_content_dir()
 # Get the next content directory
@@ -146,8 +157,14 @@ func get_picture(dir_ndx: int, image_ndx: int) -> Dictionary:
 # Otherwise return a -1
 func get_next_content_dir() -> int:
 	Config.current_dir += 1
-	return content_dirs.find("%03d" % (Config.current_dir))
-	
+	Config.current_picture = 0
+	if load_image_config(Config.current_dir):
+		return content_dirs.find("%03d" % (Config.current_dir))
+	else:
+		print("Load Image Config Failed")
+		get_parent().emit_signal("exit_game_requested")
+		return -1
+
 	
 # Private Methods
 			
