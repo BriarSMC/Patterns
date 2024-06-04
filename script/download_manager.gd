@@ -196,7 +196,7 @@ func set_available_downloads() -> void:
 #	if the download failed, then return an empty string
 func download_zipfile(index: int) -> String:
 # Step 1
-	var zipname = "%s%03d.zip" % [Constant.CONTENT_SERVER, index]
+	var zipname = "%s%s/%03d.zip" % [Constant.CONTENT_SERVER, Config.os_name, index]
 	var destname = "%s%03d.zip" % [Constant.CONTENT_DIR, index]
 # Step 2
 	loading_spinner.visible = true

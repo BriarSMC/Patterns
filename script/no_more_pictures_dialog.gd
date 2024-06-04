@@ -60,20 +60,6 @@ func _ready() -> void:
 		remove_button(cancel_button)
 	visible = false
 
-
-# _process(delta)
-# Called once per frame
-#
-# Parameters
-#	delta: float            	Seconds elapsed since last frame
-# Return
-#	None
-#==
-# What the code is doing (steps)
-# NOTE: Child must call super._ready() if it defines own _ready() method
-func _process(delta) -> void:
-	pass
-	
 	
 # Built-in Signal Callbacks
 
@@ -99,7 +85,7 @@ func _on_canceled():
 #	None
 #==
 # What the code is doing (steps)
-func _on_config_completed(result, response_code, headers, body) -> void:
+func _on_config_completed(_result, response_code, _headers, body) -> void:
 	if response_code == 200:
 		var json := JSON.new()
 		json.parse(body.get_string_from_utf8())
@@ -159,7 +145,7 @@ func display_no_more_pictures() -> void:
 func remote_content_available() -> bool:
 	print("Remote Content Available")
 	print(content_config)
-	var ver = content_config.version
+	var _ver = content_config.version
 	var dirs = content_config.dirs
 	return (dirs > Config.current_dir)
 
@@ -194,16 +180,16 @@ func download_content() -> void:
 	var content_dir = DirAccess.open(Constant.CONTENT_DIR)
 	for index in range(Config.current_dir + 1, content_config.dirs.size()):
 		var dir = ("!03d") % index
-		var http := HTTPRequest.new()
-		add_child(http)
-		var ret = http.request(Constant.CONTENT_SERVER + dir + "/image_data.tres")
+		var req := HTTPRequest.new()
+		add_child(req)
+		var ret = req.request(Constant.CONTENT_SERVER + dir + "/image_data.tres")
 		if ret != 0: 
-			http.queue_free()
+			req.queue_free()
 		else:	
 	# Step 2
 			var response = await http.request_completed
 			if not(response[0] == 0 and response[1] == 200):
-				http.queue_free()
+				req.queue_free()
 			else:
 		# Step 3
 				var json := JSON.new()

@@ -36,6 +36,8 @@ var current_player_data := {}			# Current player data
 
 # onready variables
 
+@onready var os_name: String = OS.get_name()
+
 #endregion
 
 
